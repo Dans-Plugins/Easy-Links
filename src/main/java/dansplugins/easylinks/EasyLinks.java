@@ -1,8 +1,16 @@
 package dansplugins.easylinks;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import dansplugins.easylinks.commands.HelpCommand;
+import org.bukkit.event.Listener;
+import preponderous.ponder.AbstractPonderPlugin;
+import preponderous.ponder.misc.specification.ICommand;
 
-public final class EasyLinks extends JavaPlugin {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
+public class EasyLinks extends AbstractPonderPlugin {
 
     @Override
     public void onEnable() {
@@ -14,4 +22,36 @@ public final class EasyLinks extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+    private void initializeConfigService() {
+        HashMap<String, Object> configOptions = new HashMap<>();
+        configOptions.put("debugMode", false);
+        getPonderAPI().getConfigService().initialize(configOptions);
+    }
+
+    private void initializeConfigFile() {
+        if (!(new File("./plugins/LanguageBarriers/config.yml").exists())) {
+            getPonderAPI().getConfigService().saveMissingConfigDefaultsIfNotPresent();
+        }
+        else {
+            // pre load compatibility checks
+            if (isVersionMismatched()) {
+                getPonderAPI().getConfigService().saveMissingConfigDefaultsIfNotPresent();
+            }
+            reloadConfig();
+        }
+    }
+
+    private void registerEventHandlers() {
+        ArrayList<Listener> listeners = new ArrayList<>();
+        getToolbox().getEventHandlerRegistry().registerEventHandlers(listeners, this);
+    }
+
+    private void initializeCommandService() {
+        ArrayList<ICommand> commands = new ArrayList<>(Arrays.asList(
+                new HelpCommand()
+        ));
+        getPonderAPI().getCommandService().initialize(commands, "That command wasn't found.");
+    }
+
 }
