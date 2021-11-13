@@ -1,6 +1,6 @@
 package dansplugins.easylinks;
 
-import dansplugins.easylinks.commands.HelpCommand;
+import dansplugins.easylinks.commands.*;
 import org.bukkit.event.Listener;
 import preponderous.ponder.AbstractPonderPlugin;
 import preponderous.ponder.misc.specification.ICommand;
@@ -49,7 +49,10 @@ public class EasyLinks extends AbstractPonderPlugin {
 
     private void initializeCommandService() {
         ArrayList<ICommand> commands = new ArrayList<>(Arrays.asList(
-                new HelpCommand()
+                new HelpCommand(), new CreateCommand(),
+                new DeleteCommand(), new EditCommand(),
+                new InfoCommand(), new ListCommand(),
+                new StatsCommand()
         ));
         getPonderAPI().getCommandService().initialize(commands, "That command wasn't found.");
     }
