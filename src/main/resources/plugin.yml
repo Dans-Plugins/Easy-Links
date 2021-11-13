@@ -1,0 +1,4 @@
+name: Easy Links
+version: '${project.version}'
+main: dansplugins.easylinks.EasyLinks
+api-version: 1.17
