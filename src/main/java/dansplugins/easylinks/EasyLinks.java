@@ -39,6 +39,10 @@ public class EasyLinks extends AbstractPonderPlugin {
         // create link
         Link link = new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links");
         PersistentData.getInstance().addLink(link);
+
+        if (getPonderAPI().getConfigService().getBoolean("unleahsedLinksEnabled")) {
+
+        }
     }
 
     @Override
@@ -58,6 +62,7 @@ public class EasyLinks extends AbstractPonderPlugin {
     private void initializeConfigService() {
         HashMap<String, Object> configOptions = new HashMap<>();
         configOptions.put("debugMode", false);
+        configOptions.put("unleashedLinksEnabled", false);
         getPonderAPI().getConfigService().initialize(configOptions);
     }
 
