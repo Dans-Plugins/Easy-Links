@@ -12,15 +12,20 @@ import java.util.HashMap;
 
 public class EasyLinks extends AbstractPonderPlugin {
 
+    private static EasyLinks instance;
+
+    public static EasyLinks getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
+        instance = this;
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+
     }
 
     private void initializeConfigService() {

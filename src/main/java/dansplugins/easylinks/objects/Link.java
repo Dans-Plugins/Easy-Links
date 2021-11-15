@@ -8,13 +8,11 @@ import java.util.UUID;
 public class Link implements Savable {
     private String label;
     private String url;
-    private UUID setter;
     private int uses;
 
-    public Link(String label, String url, UUID setter) {
+    public Link(String label, String url) {
         this.label = label;
         this.url = url;
-        this.setter = setter;
         uses = 0;
     }
 
@@ -32,14 +30,6 @@ public class Link implements Savable {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public UUID getSetter() {
-        return setter;
-    }
-
-    public void setSetter(UUID setter) {
-        this.setter = setter;
     }
 
     public int getUses() {
