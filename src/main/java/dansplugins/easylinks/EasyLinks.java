@@ -23,7 +23,7 @@ public class EasyLinks extends AbstractPonderPlugin {
         return instance;
     }
 
-    private String version = "v0.1";
+    private String version = "v0.2-alpha-1";
 
     @Override
     public void onEnable() {
