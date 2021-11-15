@@ -1,5 +1,8 @@
 package dansplugins.easylinks.commands;
 
+import dansplugins.easylinks.data.PersistentData;
+import dansplugins.easylinks.objects.Link;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.misc.AbstractCommand;
 
@@ -23,8 +26,11 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        // TODO: implement
-        return false;
+        commandSender.sendMessage(ChatColor.AQUA + "=== Links ===");
+        for (Link link : PersistentData.getInstance().getLinks()) {
+            commandSender.sendMessage(ChatColor.AQUA + link.getLabel());
+        }
+        return true;
     }
 
     @Override
