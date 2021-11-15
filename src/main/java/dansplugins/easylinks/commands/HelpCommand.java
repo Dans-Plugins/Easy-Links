@@ -24,8 +24,8 @@ public class HelpCommand extends AbstractCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        commandSender.sendMessage(ChatColor.AQUA + "/el list");
         commandSender.sendMessage(ChatColor.AQUA + "/el help");
+        commandSender.sendMessage(ChatColor.AQUA + "/el list");
         commandSender.sendMessage(ChatColor.AQUA + "/el view");
         commandSender.sendMessage(ChatColor.AQUA + "/el create");
         commandSender.sendMessage(ChatColor.AQUA + "/el delete");
