@@ -2,3 +2,21 @@ name: EasyLinks
 version: 0.1
 main: dansplugins.easylinks.EasyLinks
 api-version: 1.13
+
+commands:
+  easylinks:
+  el:
+
+permissions:
+  el.help:
+    default: true
+  el.list:
+    default: true
+  el.view:
+    default: true
+  el.stats:
+    default: true
+  el.create:
+    default: op
+  el.delete:
+    default: op
