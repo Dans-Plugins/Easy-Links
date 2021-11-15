@@ -69,8 +69,10 @@ public class EasyLinks extends AbstractPonderPlugin {
     }
 
     private void registerEventHandlers() {
+        /*
         ArrayList<Listener> listeners = new ArrayList<>();
         getToolbox().getEventHandlerRegistry().registerEventHandlers(listeners, this);
+        */
     }
 
     private void initializeCommandService() {
