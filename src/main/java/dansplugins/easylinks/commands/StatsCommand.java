@@ -1,5 +1,7 @@
 package dansplugins.easylinks.commands;
 
+import dansplugins.easylinks.data.PersistentData;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.misc.AbstractCommand;
 
@@ -23,13 +25,14 @@ public class StatsCommand extends AbstractCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        // TODO: implement
-        return false;
+        commandSender.sendMessage(ChatColor.AQUA + "Number of Links: " + PersistentData.getInstance().getLinks().size());
+        commandSender.sendMessage(ChatColor.AQUA + "Total number of uses: " + PersistentData.getInstance().getTotalUses());
+        commandSender.sendMessage(ChatColor.AQUA + "Most popular link: " + PersistentData.getInstance().getMostPopularLink());
+        return true;
     }
 
     @Override
     public boolean execute(CommandSender commandSender, String[] strings) {
-        // TODO: implement
-        return false;
+        return execute(commandSender);
     }
 }

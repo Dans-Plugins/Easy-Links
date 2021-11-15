@@ -29,7 +29,6 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public boolean execute(CommandSender commandSender, String[] strings) {
-        // TODO: implement
-        return false;
+        return execute(commandSender);
     }
 }

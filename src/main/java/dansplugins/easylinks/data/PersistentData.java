@@ -14,7 +14,7 @@ public class PersistentData {
 
     }
 
-    public PersistentData getInstance() {
+    public static PersistentData getInstance() {
         if (instance == null) {
             instance = new PersistentData();
         }
@@ -42,4 +42,11 @@ public class PersistentData {
         return links.remove(link);
     }
 
+    public int getTotalUses() {
+        return -1;
+    }
+
+    public String getMostPopularLink() {
+        return "(TBD)";
+    }
 }
