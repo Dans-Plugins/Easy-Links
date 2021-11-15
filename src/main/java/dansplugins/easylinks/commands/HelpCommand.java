@@ -27,8 +27,8 @@ public class HelpCommand extends AbstractCommand {
         commandSender.sendMessage(ChatColor.AQUA + "/el help");
         commandSender.sendMessage(ChatColor.AQUA + "/el delete");
         commandSender.sendMessage(ChatColor.AQUA + "/el edit");
-        commandSender.sendMessage(ChatColor.AQUA + "/el info");
-        commandSender.sendMessage(ChatColor.AQUA + "/el list)");
+        commandSender.sendMessage(ChatColor.AQUA + "/el view");
+        commandSender.sendMessage(ChatColor.AQUA + "/el list");
         commandSender.sendMessage(ChatColor.AQUA + "/el stats");
         return true;
     }

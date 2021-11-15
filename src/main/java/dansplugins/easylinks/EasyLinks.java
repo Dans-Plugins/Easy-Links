@@ -56,7 +56,7 @@ public class EasyLinks extends AbstractPonderPlugin {
         ArrayList<ICommand> commands = new ArrayList<>(Arrays.asList(
                 new HelpCommand(), new CreateCommand(),
                 new DeleteCommand(), new EditCommand(),
-                new InfoCommand(), new ListCommand(),
+                new ViewCommand(), new ListCommand(),
                 new StatsCommand()
         ));
         getPonderAPI().getCommandService().initialize(commands, "That command wasn't found.");
