@@ -4,18 +4,21 @@ import org.bukkit.command.CommandSender;
 import preponderous.ponder.misc.AbstractCommand;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class InfoCommand extends AbstractCommand {
+
+    private ArrayList<String> names = new ArrayList<>(Collections.singletonList("info"));
+    private ArrayList<String> permissions = new ArrayList<>(Collections.singletonList("el.info"));
+
     @Override
     public ArrayList<String> getNames() {
-        // TODO: implement
-        return super.getNames();
+        return names;
     }
 
     @Override
     public ArrayList<String> getPermissions() {
-        // TODO: implement
-        return super.getPermissions();
+        return permissions;
     }
 
     @Override
