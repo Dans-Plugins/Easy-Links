@@ -36,6 +36,7 @@ public class DeleteCommand extends AbstractCommand {
         ArrayList<String> doubleQuoteArgs = EasyLinks.getInstance().getToolbox().getArgumentParser().getArgumentsInsideDoubleQuotes(args);
         if (doubleQuoteArgs.size() != 1) {
             execute(commandSender); // send usage message
+            return false;
         }
 
         String label = doubleQuoteArgs.get(0);

@@ -36,6 +36,7 @@ public class CreateCommand extends AbstractCommand {
         ArrayList<String> doubleQuoteArgs = EasyLinks.getInstance().getToolbox().getArgumentParser().getArgumentsInsideDoubleQuotes(args);
         if (doubleQuoteArgs.size() != 2) {
             execute(commandSender); // send usage message
+            return false;
         }
 
         String label = doubleQuoteArgs.get(0);
