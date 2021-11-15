@@ -38,8 +38,13 @@ public class PersistentData {
         return links.add(link);
     }
 
-    public boolean removeLink(Link link) {
-        return links.remove(link);
+    public boolean removeLink(String label) {
+        for (Link link : links) {
+            if (link.getLabel().equalsIgnoreCase(label)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getTotalUses() {

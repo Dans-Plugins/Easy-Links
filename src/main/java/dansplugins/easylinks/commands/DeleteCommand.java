@@ -1,5 +1,9 @@
 package dansplugins.easylinks.commands;
 
+import dansplugins.easylinks.EasyLinks;
+import dansplugins.easylinks.data.PersistentData;
+import dansplugins.easylinks.objects.Link;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.misc.AbstractCommand;
 
@@ -23,13 +27,28 @@ public class DeleteCommand extends AbstractCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        // TODO: implement
+        commandSender.sendMessage(ChatColor.RED + "Usage: /el delete \"label\"");
         return false;
     }
 
     @Override
-    public boolean execute(CommandSender commandSender, String[] strings) {
-        // TODO: implement
-        return false;
+    public boolean execute(CommandSender commandSender, String[] args) {
+        ArrayList<String> doubleQuoteArgs = EasyLinks.getInstance().getToolbox().getArgumentParser().getArgumentsInsideDoubleQuotes(args);
+        if (doubleQuoteArgs.size() != 1) {
+            execute(commandSender); // send usage message
+        }
+
+        String label = doubleQuoteArgs.get(0);
+        boolean success = PersistentData.getInstance().removeLink(label);
+
+        if (success) {
+            commandSender.sendMessage(ChatColor.GREEN + "Link deleted.");
+            return true;
+        }
+        else {
+            commandSender.sendMessage(ChatColor.GREEN + "Something went wrong.");
+            return false;
+        }
+
     }
 }
