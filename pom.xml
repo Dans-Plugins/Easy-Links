@@ -6,7 +6,7 @@
 
     <groupId>dansplugins</groupId>
     <artifactId>Easy-Links</artifactId>
-    <version>v0.1-alpha-1</version>
+    <version>v0.1</version>
     <packaging>jar</packaging>
 
     <name>Easy Links</name>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

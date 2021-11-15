@@ -18,6 +18,8 @@ public class EasyLinks extends AbstractPonderPlugin {
         return instance;
     }
 
+    private String version = "v0.1";
+
     @Override
     public void onEnable() {
         instance = this;
@@ -55,9 +57,8 @@ public class EasyLinks extends AbstractPonderPlugin {
     private void initializeCommandService() {
         ArrayList<ICommand> commands = new ArrayList<>(Arrays.asList(
                 new HelpCommand(), new CreateCommand(),
-                new DeleteCommand(), new EditCommand(),
-                new ViewCommand(), new ListCommand(),
-                new StatsCommand()
+                new DeleteCommand(), new ViewCommand(),
+                new ListCommand(), new StatsCommand()
         ));
         getPonderAPI().getCommandService().initialize(commands, "That command wasn't found.");
     }
