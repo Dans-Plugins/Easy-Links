@@ -1,6 +1,8 @@
 package dansplugins.easylinks;
 
 import dansplugins.easylinks.commands.*;
+import dansplugins.easylinks.data.PersistentData;
+import dansplugins.easylinks.objects.Link;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
@@ -33,6 +35,10 @@ public class EasyLinks extends AbstractPonderPlugin {
         registerEventHandlers();
         initializeCommandService();
         getPonderAPI().setDebug(false);
+
+        // create link
+        Link link = new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links");
+        PersistentData.getInstance().addLink(link);
     }
 
     @Override
