@@ -49,6 +49,5 @@ public class DeleteCommand extends AbstractCommand {
             commandSender.sendMessage(ChatColor.GREEN + "Something went wrong.");
             return false;
         }
-
     }
 }
