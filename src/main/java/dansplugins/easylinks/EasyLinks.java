@@ -1,8 +1,11 @@
 package dansplugins.easylinks;
 
 import dansplugins.easylinks.commands.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import preponderous.ponder.AbstractPonderPlugin;
+import preponderous.ponder.misc.PonderAPI_Integrator;
 import preponderous.ponder.misc.specification.ICommand;
 
 import java.io.File;
@@ -23,11 +26,27 @@ public class EasyLinks extends AbstractPonderPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        ponderAPI_integrator = new PonderAPI_Integrator(this);
+        toolbox = getPonderAPI().getToolbox();
+        initializeConfigService();
+        initializeConfigFile();
+        registerEventHandlers();
+        initializeCommandService();
+        getPonderAPI().setDebug(false);
     }
 
     @Override
     public void onDisable() {
 
+    }
+
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (args.length == 0) {
+            DefaultCommand defaultCommand = new DefaultCommand();
+            return defaultCommand.execute(sender);
+        }
+
+        return getPonderAPI().getCommandService().interpretCommand(sender, label, args);
     }
 
     private void initializeConfigService() {
