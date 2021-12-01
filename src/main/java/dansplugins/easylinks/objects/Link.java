@@ -1,7 +1,13 @@
 package dansplugins.easylinks.objects;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import preponderous.ponder.modifiers.Savable;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,6 +20,10 @@ public class Link implements Savable {
         this.label = label;
         this.url = url;
         uses = 0;
+    }
+
+    public Link(Map<String, String> data) {
+        this.load(data);
     }
 
     public String getLabel() {
@@ -40,14 +50,24 @@ public class Link implements Savable {
         this.uses = uses;
     }
 
-    @Override
+    @Override()
     public Map<String, String> save() {
-        // TODO: implement
-        return null;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        Map<String, String> saveMap = new HashMap<>();
+        saveMap.put("label", gson.toJson(label));
+        saveMap.put("url", gson.toJson(url));
+        saveMap.put("uses", gson.toJson(uses));
+
+        return saveMap;
     }
 
-    @Override
-    public void load(Map<String, String> map) {
-        // TODO: implement
+    @Override()
+    public void load(Map<String, String> data) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        label = gson.fromJson(data.get("label"), String.class);
+        url = gson.fromJson(data.get("url"), String.class);
+        uses = Integer.parseInt(gson.fromJson(data.get("uses"), String.class));
     }
 }

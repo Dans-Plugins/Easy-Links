@@ -2,6 +2,7 @@ package dansplugins.easylinks;
 
 import dansplugins.easylinks.commands.*;
 import dansplugins.easylinks.data.PersistentData;
+import dansplugins.easylinks.managers.StorageManager;
 import dansplugins.easylinks.objects.Link;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -23,7 +24,7 @@ public class EasyLinks extends AbstractPonderPlugin {
         return instance;
     }
 
-    private String version = "v0.2-alpha-1";
+    private String version = "v0.2";
 
     @Override
     public void onEnable() {
@@ -45,11 +46,13 @@ public class EasyLinks extends AbstractPonderPlugin {
             PersistentData.getInstance().addLink(new Link("PMC", "https://www.planetminecraft.com/server/kingdom-anarchy/"));
             PersistentData.getInstance().addLink(new Link("Custom Plugins", "https://www.spigotmc.org/resources/authors/danthetechman.659208/"));
         }
+
+        StorageManager.getInstance().load();
     }
 
     @Override
     public void onDisable() {
-
+        StorageManager.getInstance().save();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -59,6 +62,21 @@ public class EasyLinks extends AbstractPonderPlugin {
         }
 
         return getPonderAPI().getCommandService().interpretCommand(sender, label, args);
+    }
+
+    @Override
+    public String getVersion() {
+        return version;
+    }
+
+    @Override
+    public boolean isVersionMismatched() {
+        String configVersion = this.getConfig().getString("version");
+        if (configVersion == null || this.getVersion() == null) {
+            return false;
+        } else {
+            return !configVersion.equalsIgnoreCase(this.getVersion());
+        }
     }
 
     private void initializeConfigService() {

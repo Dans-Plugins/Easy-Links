@@ -25,6 +25,10 @@ public class PersistentData {
         return links;
     }
 
+    public void setLinks(HashSet<Link> links) {
+        this.links = links;
+    }
+
     public Link getLink(String label) {
         for (Link link : links) {
             if (link.getLabel().equalsIgnoreCase(label)) {
