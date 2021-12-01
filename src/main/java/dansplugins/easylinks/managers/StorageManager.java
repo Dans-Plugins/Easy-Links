@@ -11,8 +11,8 @@ import java.util.*;
  */
 public class StorageManager {
     private static StorageManager instance;
-    private final static String FILE_PATH = "./plugins/SimpleSkills/";
-    private final static String PLAYER_RECORDS_FILE_NAME = "playerRecords.json";
+    private final static String FILE_PATH = "./plugins/EasyLinks/";
+    private final static String LINKS_FILE_NAME = "links.json";
     private final JsonWriterReader jsonWriterReader = new JsonWriterReader();
 
     private StorageManager() {
@@ -35,17 +35,17 @@ public class StorageManager {
     }
 
     private void saveLinks() {
-        List<Map<String, String>> playerRecords = new ArrayList<>();
+        List<Map<String, String>> links = new ArrayList<>();
         for (Link link : PersistentData.getInstance().getLinks()){
-            playerRecords.add(link.save());
+            links.add(link.save());
         }
-        jsonWriterReader.writeOutFiles(playerRecords, PLAYER_RECORDS_FILE_NAME);
+        jsonWriterReader.writeOutFiles(links, LINKS_FILE_NAME);
     }
 
 
     private void loadLinks() {
         PersistentData.getInstance().getLinks().clear();
-        ArrayList<HashMap<String, String>> data = jsonWriterReader.loadDataFromFilename(FILE_PATH + PLAYER_RECORDS_FILE_NAME);
+        ArrayList<HashMap<String, String>> data = jsonWriterReader.loadDataFromFilename(FILE_PATH + LINKS_FILE_NAME);
         HashSet<Link> links = new HashSet<>();
         for (Map<String, String> linkData : data){
             Link link = new Link(linkData);
