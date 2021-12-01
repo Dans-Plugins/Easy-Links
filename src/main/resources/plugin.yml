@@ -1,5 +1,5 @@
 name: EasyLinks
-version: 0.2
+version: 0.2.1
 main: dansplugins.easylinks.EasyLinks
 api-version: 1.13
 
