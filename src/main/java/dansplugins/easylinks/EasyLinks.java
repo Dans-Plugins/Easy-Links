@@ -40,13 +40,6 @@ public class EasyLinks extends AbstractPonderPlugin {
         // create link
         PersistentData.getInstance().addLink(new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links"));
 
-        if (getPonderAPI().getConfigService().getBoolean("unleashedLinksEnabled")) {
-            PersistentData.getInstance().addLink(new Link("Rules", "https://discord.com/channels/906452086550581278/906455394128371753/906455421353603094"));
-            PersistentData.getInstance().addLink(new Link("Discord", "https://discord.gg/pYrwp3eggx \n"));
-            PersistentData.getInstance().addLink(new Link("PMC", "https://www.planetminecraft.com/server/kingdom-anarchy/"));
-            PersistentData.getInstance().addLink(new Link("Custom Plugins", "https://www.spigotmc.org/resources/authors/danthetechman.659208/"));
-        }
-
         StorageManager.getInstance().load();
     }
 
@@ -82,7 +75,6 @@ public class EasyLinks extends AbstractPonderPlugin {
     private void initializeConfigService() {
         HashMap<String, Object> configOptions = new HashMap<>();
         configOptions.put("debugMode", false);
-        configOptions.put("unleashedLinksEnabled", false);
         getPonderAPI().getConfigService().initialize(configOptions);
     }
 
