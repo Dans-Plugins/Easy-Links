@@ -2,15 +2,14 @@ package dansplugins.easylinks.objects;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import preponderous.ponder.modifiers.Savable;
+import preponderous.ponder.misc.Savable;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.UUID;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class Link implements Savable {
     private String label;
     private String url;
