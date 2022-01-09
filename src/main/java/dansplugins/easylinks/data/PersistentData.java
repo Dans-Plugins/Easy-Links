@@ -4,6 +4,9 @@ import dansplugins.easylinks.objects.Link;
 
 import java.util.HashSet;
 
+/**
+ * @author Daniel McCoy Stephenson
+ */
 public class PersistentData {
 
     private static PersistentData instance;

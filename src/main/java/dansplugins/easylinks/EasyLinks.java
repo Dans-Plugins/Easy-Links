@@ -2,36 +2,34 @@ package dansplugins.easylinks;
 
 import dansplugins.easylinks.commands.*;
 import dansplugins.easylinks.data.PersistentData;
-import dansplugins.easylinks.managers.StorageManager;
 import dansplugins.easylinks.objects.Link;
+import dansplugins.easylinks.services.LocalConfigService;
+import dansplugins.easylinks.services.LocalStorageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Listener;
-import preponderous.ponder.AbstractPonderPlugin;
-import preponderous.ponder.misc.PonderAPI_Integrator;
-import preponderous.ponder.misc.specification.ICommand;
+import preponderous.ponder.minecraft.abs.AbstractPluginCommand;
+import preponderous.ponder.minecraft.abs.PonderPlugin;
+import preponderous.ponder.minecraft.spigot.misc.PonderAPI_Integrator;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
-public class EasyLinks extends AbstractPonderPlugin {
-
+/**
+ * @author Daniel McCoy Stephenson
+ */
+public class EasyLinks extends PonderPlugin {
     private static EasyLinks instance;
+    private final String pluginVersion = "v" + getDescription().getVersion();
 
     public static EasyLinks getInstance() {
         return instance;
     }
 
-    private String version = "v0.2.1";
-
     @Override
     public void onEnable() {
         instance = this;
         ponderAPI_integrator = new PonderAPI_Integrator(this);
-        toolbox = getPonderAPI().getToolbox();
-        initializeConfigService();
         initializeConfigFile();
         registerEventHandlers();
         initializeCommandService();
@@ -40,12 +38,12 @@ public class EasyLinks extends AbstractPonderPlugin {
         // create link
         PersistentData.getInstance().addLink(new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links"));
 
-        StorageManager.getInstance().load();
+        LocalStorageService.getInstance().load();
     }
 
     @Override
     public void onDisable() {
-        StorageManager.getInstance().save();
+        LocalStorageService.getInstance().save();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -57,12 +55,10 @@ public class EasyLinks extends AbstractPonderPlugin {
         return getPonderAPI().getCommandService().interpretCommand(sender, label, args);
     }
 
-    @Override
     public String getVersion() {
-        return version;
+        return pluginVersion;
     }
 
-    @Override
     public boolean isVersionMismatched() {
         String configVersion = this.getConfig().getString("version");
         if (configVersion == null || this.getVersion() == null) {
@@ -72,20 +68,14 @@ public class EasyLinks extends AbstractPonderPlugin {
         }
     }
 
-    private void initializeConfigService() {
-        HashMap<String, Object> configOptions = new HashMap<>();
-        configOptions.put("debugMode", false);
-        getPonderAPI().getConfigService().initialize(configOptions);
-    }
-
     private void initializeConfigFile() {
         if (!(new File("./plugins/LanguageBarriers/config.yml").exists())) {
-            getPonderAPI().getConfigService().saveMissingConfigDefaultsIfNotPresent();
+            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
         }
         else {
             // pre load compatibility checks
             if (isVersionMismatched()) {
-                getPonderAPI().getConfigService().saveMissingConfigDefaultsIfNotPresent();
+                LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
             }
             reloadConfig();
         }
@@ -99,12 +89,11 @@ public class EasyLinks extends AbstractPonderPlugin {
     }
 
     private void initializeCommandService() {
-        ArrayList<ICommand> commands = new ArrayList<>(Arrays.asList(
+        ArrayList<AbstractPluginCommand> commands = new ArrayList<>(Arrays.asList(
                 new HelpCommand(), new CreateCommand(),
                 new DeleteCommand(), new ViewCommand(),
                 new ListCommand(), new StatsCommand()
         ));
         getPonderAPI().getCommandService().initialize(commands, "That command wasn't found.");
     }
-
 }

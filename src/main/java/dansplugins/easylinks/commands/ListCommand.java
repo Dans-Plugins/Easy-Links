@@ -4,24 +4,18 @@ import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import preponderous.ponder.misc.AbstractCommand;
+import preponderous.ponder.minecraft.abs.AbstractPluginCommand;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
-public class ListCommand extends AbstractCommand {
+/**
+ * @author Daniel McCoy Stephenson
+ */
+public class ListCommand extends AbstractPluginCommand {
 
-    private ArrayList<String> names = new ArrayList<>(Collections.singletonList("list"));
-    private ArrayList<String> permissions = new ArrayList<>(Collections.singletonList("el.list"));
-
-    @Override
-    public ArrayList<String> getNames() {
-        return names;
-    }
-
-    @Override
-    public ArrayList<String> getPermissions() {
-        return permissions;
+    public ListCommand() {
+        super(new ArrayList<>(Arrays.asList("list")), new ArrayList<>(Arrays.asList("el.list")));
     }
 
     @Override

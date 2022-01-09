@@ -1,28 +1,22 @@
 package dansplugins.easylinks.commands;
 
-import dansplugins.easylinks.EasyLinks;
 import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import preponderous.ponder.misc.AbstractCommand;
+import preponderous.ponder.minecraft.abs.AbstractPluginCommand;
+import preponderous.ponder.misc.ArgumentParser;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
-public class CreateCommand extends AbstractCommand {
+/**
+ * @author Daniel McCoy Stephenson
+ */
+public class CreateCommand extends AbstractPluginCommand {
 
-    private ArrayList<String> names = new ArrayList<>(Collections.singletonList("create"));
-    private ArrayList<String> permissions = new ArrayList<>(Collections.singletonList("el.create"));
-
-    @Override
-    public ArrayList<String> getNames() {
-        return names;
-    }
-
-    @Override
-    public ArrayList<String> getPermissions() {
-        return permissions;
+    public CreateCommand() {
+        super(new ArrayList<>(Arrays.asList("create")), new ArrayList<>(Arrays.asList("el.create")));
     }
 
     @Override
@@ -33,7 +27,8 @@ public class CreateCommand extends AbstractCommand {
 
     @Override
     public boolean execute(CommandSender commandSender, String[] args) {
-        ArrayList<String> doubleQuoteArgs = EasyLinks.getInstance().getToolbox().getArgumentParser().getArgumentsInsideDoubleQuotes(args);
+        ArgumentParser argumentParser = new ArgumentParser();
+        ArrayList<String> doubleQuoteArgs = argumentParser.getArgumentsInsideDoubleQuotes(args);
         if (doubleQuoteArgs.size() != 2) {
             execute(commandSender); // send usage message
             return false;

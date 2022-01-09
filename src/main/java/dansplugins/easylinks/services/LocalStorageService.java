@@ -1,4 +1,4 @@
-package dansplugins.easylinks.managers;
+package dansplugins.easylinks.services;
 
 import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
@@ -7,21 +7,21 @@ import preponderous.ponder.misc.JsonWriterReader;
 import java.util.*;
 
 /**
- * @author Daniel Stephenson
+ * @author Daniel McCoy Stephenson
  */
-public class StorageManager {
-    private static StorageManager instance;
+public class LocalStorageService {
+    private static LocalStorageService instance;
     private final static String FILE_PATH = "./plugins/EasyLinks/";
     private final static String LINKS_FILE_NAME = "links.json";
     private final JsonWriterReader jsonWriterReader = new JsonWriterReader();
 
-    private StorageManager() {
+    private LocalStorageService() {
         jsonWriterReader.initialize(FILE_PATH);
     }
 
-    public static StorageManager getInstance() {
+    public static LocalStorageService getInstance() {
         if (instance == null) {
-            instance = new StorageManager();
+            instance = new LocalStorageService();
         }
         return instance;
     }
