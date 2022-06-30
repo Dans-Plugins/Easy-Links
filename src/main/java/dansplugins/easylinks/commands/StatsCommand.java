@@ -12,16 +12,18 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class StatsCommand extends AbstractPluginCommand {
+    private final PersistentData persistentData;
 
-    public StatsCommand() {
+    public StatsCommand(PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("stats")), new ArrayList<>(Arrays.asList("el.stats")));
+        this.persistentData = persistentData;
     }
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        commandSender.sendMessage(ChatColor.AQUA + "Number of Links: " + PersistentData.getInstance().getLinks().size());
-        commandSender.sendMessage(ChatColor.AQUA + "Total number of uses: " + PersistentData.getInstance().getTotalUses());
-        commandSender.sendMessage(ChatColor.AQUA + "Most popular link: " + PersistentData.getInstance().getMostPopularLink());
+        commandSender.sendMessage(ChatColor.AQUA + "Number of Links: " + persistentData.getLinks().size());
+        commandSender.sendMessage(ChatColor.AQUA + "Total number of uses: " + persistentData.getTotalUses());
+        commandSender.sendMessage(ChatColor.AQUA + "Most popular link: " + persistentData.getMostPopularLink());
         return true;
     }
 

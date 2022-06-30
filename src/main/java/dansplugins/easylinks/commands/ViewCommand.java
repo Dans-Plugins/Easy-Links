@@ -15,9 +15,11 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class ViewCommand extends AbstractPluginCommand {
+    private final PersistentData persistentData;
 
-    public ViewCommand() {
+    public ViewCommand(PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("view")), new ArrayList<>(Arrays.asList("el.view")));
+        this.persistentData = persistentData;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class ViewCommand extends AbstractPluginCommand {
         }
 
         String label = doubleQuoteArgs.get(0);
-        Link link = PersistentData.getInstance().getLink(label);
+        Link link = persistentData.getLink(label);
         if (link == null) {
             commandSender.sendMessage(ChatColor.RED + "That link wasn't found.");
             return false;
