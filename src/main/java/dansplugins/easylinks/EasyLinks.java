@@ -3,8 +3,8 @@ package dansplugins.easylinks;
 import dansplugins.easylinks.commands.*;
 import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
-import dansplugins.easylinks.services.LocalConfigService;
-import dansplugins.easylinks.services.LocalStorageService;
+import dansplugins.easylinks.services.ConfigService;
+import dansplugins.easylinks.services.StorageService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
@@ -19,31 +19,25 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class EasyLinks extends PonderBukkitPlugin {
-    private static EasyLinks instance;
     private final String pluginVersion = "v" + getDescription().getVersion();
-    private final CommandService commandService = new CommandService(getPonder());
 
-    /**
-     * This can be used to get the instance of the main class that is managed by itself.
-     * @return The managed instance of the main class.
-     */
-    public static EasyLinks getInstance() {
-        return instance;
-    }
+    private final CommandService commandService = new CommandService(getPonder());
+    private final PersistentData persistentData = new PersistentData();
+    private final StorageService storageService = new StorageService(persistentData);
+    private final ConfigService configService = new ConfigService(this);
 
     /**
      * This runs when the server starts.
      */
     @Override
     public void onEnable() {
-        instance = this;
         initializeConfig();
         initializeCommandService();
 
         // create link
-        PersistentData.getInstance().addLink(new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links"));
+        persistentData.addLink(new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links"));
 
-        LocalStorageService.getInstance().load();
+        storageService.load();
     }
 
     /**
@@ -57,7 +51,7 @@ public class EasyLinks extends PonderBukkitPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            DefaultCommand defaultCommand = new DefaultCommand();
+            DefaultCommand defaultCommand = new DefaultCommand(this);
             return defaultCommand.execute(sender);
         }
 
@@ -90,7 +84,7 @@ public class EasyLinks extends PonderBukkitPlugin {
             performCompatibilityChecks();
         }
         else {
-            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
+            configService.saveMissingConfigDefaultsIfNotPresent();
         }
     }
 
@@ -100,7 +94,7 @@ public class EasyLinks extends PonderBukkitPlugin {
 
     private void performCompatibilityChecks() {
         if (isVersionMismatched()) {
-            LocalConfigService.getInstance().saveMissingConfigDefaultsIfNotPresent();
+            configService.saveMissingConfigDefaultsIfNotPresent();
         }
         reloadConfig();
     }
@@ -110,9 +104,9 @@ public class EasyLinks extends PonderBukkitPlugin {
      */
     private void initializeCommandService() {
         ArrayList<AbstractPluginCommand> commands = new ArrayList<>(Arrays.asList(
-                new HelpCommand(), new CreateCommand(),
-                new DeleteCommand(), new ViewCommand(),
-                new ListCommand(), new StatsCommand()
+                new HelpCommand(), new CreateCommand(persistentData),
+                new DeleteCommand(persistentData), new ViewCommand(persistentData),
+                new ListCommand(persistentData), new StatsCommand(persistentData)
         ));
         getPonder().getCommandService().initialize(commands, "That command wasn't found.");
     }

@@ -14,9 +14,11 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class DeleteCommand extends AbstractPluginCommand {
+    private final PersistentData persistentData;
 
-    public DeleteCommand() {
+    public DeleteCommand(PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("delete")), new ArrayList<>(Arrays.asList("el.delete")));
+        this.persistentData = persistentData;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class DeleteCommand extends AbstractPluginCommand {
         }
 
         String label = doubleQuoteArgs.get(0);
-        boolean success = PersistentData.getInstance().removeLink(label);
+        boolean success = persistentData.removeLink(label);
 
         if (success) {
             commandSender.sendMessage(ChatColor.GREEN + "Link deleted.");

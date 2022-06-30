@@ -15,9 +15,11 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class CreateCommand extends AbstractPluginCommand {
+    private final PersistentData persistentData;
 
-    public CreateCommand() {
+    public CreateCommand(PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("create")), new ArrayList<>(Arrays.asList("el.create")));
+        this.persistentData = persistentData;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CreateCommand extends AbstractPluginCommand {
         String label = doubleQuoteArgs.get(0);
         String link = doubleQuoteArgs.get(1);
         Link newLink = new Link(label, link);
-        PersistentData.getInstance().addLink(newLink);
+        persistentData.addLink(newLink);
         commandSender.sendMessage(ChatColor.GREEN + "Link created.");
         return true;
     }

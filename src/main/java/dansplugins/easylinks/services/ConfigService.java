@@ -15,35 +15,28 @@ import org.bukkit.configuration.file.FileConfiguration;
 /**
  * @author Daniel McCoy Stephenson
  */
-public class LocalConfigService {
+public class ConfigService {
+    private final EasyLinks easyLinks;
 
-    private static LocalConfigService instance;
     private boolean altered = false;
 
-    private LocalConfigService() {
-
-    }
-
-    public static LocalConfigService getInstance() {
-        if (instance == null) {
-            instance = new LocalConfigService();
-        }
-        return instance;
+    public ConfigService(EasyLinks easyLinks) {
+        this.easyLinks = easyLinks;
     }
 
     public void saveMissingConfigDefaultsIfNotPresent() {
         // set version
         if (!getConfig().isString("version")) {
-            getConfig().addDefault("version", EasyLinks.getInstance().getVersion());
+            getConfig().addDefault("version", easyLinks.getVersion());
         } else {
-            getConfig().set("version", EasyLinks.getInstance().getVersion());
+            getConfig().set("version", easyLinks.getVersion());
         }
 
         // save config options
         if (!isSet("debugMode")) { getConfig().set("debugMode", false); }
 
         getConfig().options().copyDefaults(true);
-        EasyLinks.getInstance().saveConfig();
+        easyLinks.saveConfig();
     }
 
     public void setConfigOption(String option, String value, CommandSender sender) {
@@ -66,7 +59,7 @@ public class LocalConfigService {
             }
 
             // save
-            EasyLinks.getInstance().saveConfig();
+            easyLinks.saveConfig();
             altered = true;
         } else {
             sender.sendMessage(ChatColor.RED + "That config option wasn't found.");
@@ -84,7 +77,7 @@ public class LocalConfigService {
     }
 
     public FileConfiguration getConfig() {
-        return EasyLinks.getInstance().getConfig();
+        return easyLinks.getConfig();
     }
 
     public boolean isSet(String option) {

@@ -13,19 +13,21 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class ListCommand extends AbstractPluginCommand {
+    private final PersistentData persistentData;
 
-    public ListCommand() {
+    public ListCommand(PersistentData persistentData) {
         super(new ArrayList<>(Arrays.asList("list")), new ArrayList<>(Arrays.asList("el.list")));
+        this.persistentData = persistentData;
     }
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        if (PersistentData.getInstance().getLinks().size() == 0) {
+        if (persistentData.getLinks().size() == 0) {
             commandSender.sendMessage(ChatColor.AQUA + "There are no links set at this time.");
             return true;
         }
         commandSender.sendMessage(ChatColor.AQUA + "=== Links ===");
-        for (Link link : PersistentData.getInstance().getLinks()) {
+        for (Link link : persistentData.getLinks()) {
             commandSender.sendMessage(ChatColor.AQUA + link.getLabel());
         }
         return true;

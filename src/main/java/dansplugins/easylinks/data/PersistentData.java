@@ -8,21 +8,7 @@ import java.util.HashSet;
  * @author Daniel McCoy Stephenson
  */
 public class PersistentData {
-
-    private static PersistentData instance;
-
     private HashSet<Link> links = new HashSet<>();
-
-    private PersistentData() {
-
-    }
-
-    public static PersistentData getInstance() {
-        if (instance == null) {
-            instance = new PersistentData();
-        }
-        return instance;
-    }
 
     public HashSet<Link> getLinks() {
         return links;
