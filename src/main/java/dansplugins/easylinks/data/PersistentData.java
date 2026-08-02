@@ -32,12 +32,11 @@ public class PersistentData {
     }
 
     public boolean removeLink(String label) {
-        for (Link link : links) {
-            if (link.getLabel().equalsIgnoreCase(label)) {
-                return true;
-            }
+        Link linkToRemove = getLink(label);
+        if (linkToRemove == null) {
+            return false;
         }
-        return false;
+        return links.remove(linkToRemove);
     }
 
     public int getTotalUses() {
