@@ -8,6 +8,8 @@ commands:
   el:
 
 permissions:
+  el.default:
+    default: true
   el.help:
     default: true
   el.list:

@@ -20,6 +20,7 @@ Easy Links is a Spigot plugin that lets server administrators save named URLs so
 
 | Permission | Default | Description |
 |------------|---------|-------------|
+| `el.default` | `true` | View the plugin banner (running `/el` with no arguments). |
 | `el.help` | `true` | View the help menu. |
 | `el.list` | `true` | List all saved links. |
 | `el.view` | `true` | View a link's URL. |

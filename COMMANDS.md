@@ -4,6 +4,7 @@ All commands use `/el` or `/easylinks` as the base.
 
 | Command | Description | Permission |
 |---------|-------------|------------|
+| `/el` | View the plugin banner (name, version, wiki link). | `el.default` |
 | `/el help` | View a list of commands. | `el.help` |
 | `/el list` | List all saved links. | `el.list` |
 | `/el view <name>` | View the URL for a saved link. | `el.view` |
