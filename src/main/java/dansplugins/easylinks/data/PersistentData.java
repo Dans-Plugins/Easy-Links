@@ -40,10 +40,24 @@ public class PersistentData {
     }
 
     public int getTotalUses() {
-        return -1;
+        int totalUses = 0;
+        for (Link link : links) {
+            totalUses += link.getUses();
+        }
+        return totalUses;
     }
 
     public String getMostPopularLink() {
-        return "(TBD)";
+        if (links.isEmpty()) {
+            return "N/A";
+        }
+
+        Link mostPopularLink = null;
+        for (Link link : links) {
+            if (mostPopularLink == null || link.getUses() > mostPopularLink.getUses()) {
+                mostPopularLink = link;
+            }
+        }
+        return mostPopularLink.getLabel();
     }
 }

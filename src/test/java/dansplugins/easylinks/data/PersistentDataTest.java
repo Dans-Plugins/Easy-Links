@@ -61,4 +61,38 @@ class PersistentDataTest {
         assertNull(persistentData.getLink("discord"));
         assertNotNull(persistentData.getLink("wiki"));
     }
+
+    @Test
+    void getTotalUses_returnsZeroWhenNoLinksExist() {
+        assertEquals(0, persistentData.getTotalUses());
+    }
+
+    @Test
+    void getTotalUses_sumsUsesAcrossAllLinks() {
+        Link discord = new Link("discord", "https://discord.gg/example");
+        discord.setUses(3);
+        Link wiki = new Link("wiki", "https://example.com/wiki");
+        wiki.setUses(5);
+        persistentData.addLink(discord);
+        persistentData.addLink(wiki);
+
+        assertEquals(8, persistentData.getTotalUses());
+    }
+
+    @Test
+    void getMostPopularLink_returnsPlaceholderWhenNoLinksExist() {
+        assertEquals("N/A", persistentData.getMostPopularLink());
+    }
+
+    @Test
+    void getMostPopularLink_returnsLabelOfLinkWithHighestUses() {
+        Link discord = new Link("discord", "https://discord.gg/example");
+        discord.setUses(3);
+        Link wiki = new Link("wiki", "https://example.com/wiki");
+        wiki.setUses(5);
+        persistentData.addLink(discord);
+        persistentData.addLink(wiki);
+
+        assertEquals("wiki", persistentData.getMostPopularLink());
+    }
 }

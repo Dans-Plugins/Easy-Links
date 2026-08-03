@@ -1,5 +1,6 @@
 package dansplugins.easylinks.services;
 
+import dansplugins.easylinks.EasyLinks;
 import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
 import preponderous.ponder.misc.JsonWriterReader;
@@ -10,13 +11,15 @@ import java.util.*;
  * @author Daniel McCoy Stephenson
  */
 public class StorageService {
+    private final EasyLinks easyLinks;
     private final PersistentData persistentData;
 
     private final static String FILE_PATH = "./plugins/EasyLinks/";
     private final static String LINKS_FILE_NAME = "links.json";
     private final JsonWriterReader jsonWriterReader = new JsonWriterReader();
 
-    public StorageService(PersistentData persistentData) {
+    public StorageService(EasyLinks easyLinks, PersistentData persistentData) {
+        this.easyLinks = easyLinks;
         this.persistentData = persistentData;
         jsonWriterReader.initialize(FILE_PATH);
     }
@@ -35,6 +38,7 @@ public class StorageService {
             links.add(link.save());
         }
         jsonWriterReader.writeOutFiles(links, LINKS_FILE_NAME);
+        easyLinks.debug("Saved " + links.size() + " link(s) to storage.");
     }
 
 
@@ -47,5 +51,6 @@ public class StorageService {
             links.add(link);
         }
         persistentData.setLinks(links);
+        easyLinks.debug("Loaded " + links.size() + " link(s) from storage.");
     }
 }
