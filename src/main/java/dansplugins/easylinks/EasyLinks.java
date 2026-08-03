@@ -23,7 +23,7 @@ public class EasyLinks extends PonderBukkitPlugin {
 
     private final CommandService commandService = new CommandService(getPonder());
     private final PersistentData persistentData = new PersistentData();
-    private final StorageService storageService = new StorageService(persistentData);
+    private final StorageService storageService = new StorageService(this, persistentData);
     private final ConfigService configService = new ConfigService(this);
 
     /**
@@ -76,6 +76,16 @@ public class EasyLinks extends PonderBukkitPlugin {
             return false;
         } else {
             return !configVersion.equalsIgnoreCase(this.getVersion());
+        }
+    }
+
+    /**
+     * Logs a message to the console if the debugMode config option is enabled.
+     * @param message The message to log.
+     */
+    public void debug(String message) {
+        if (configService.getBoolean("debugMode")) {
+            getLogger().info("[Debug] " + message);
         }
     }
 

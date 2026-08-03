@@ -61,6 +61,7 @@ public class ConfigService {
             // save
             easyLinks.saveConfig();
             altered = true;
+            easyLinks.debug("Config option '" + option + "' set to '" + value + "'.");
         } else {
             sender.sendMessage(ChatColor.RED + "That config option wasn't found.");
         }

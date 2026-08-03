@@ -44,6 +44,8 @@ public class ViewCommand extends AbstractPluginCommand {
             return false;
         }
 
+        link.setUses(link.getUses() + 1);
+
         commandSender.sendMessage(ChatColor.AQUA + " === " + link.getLabel() + " === ");
         commandSender.sendMessage(ChatColor.AQUA + link.getUrl());
         return true;
