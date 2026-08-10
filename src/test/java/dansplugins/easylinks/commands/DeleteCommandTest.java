@@ -32,6 +32,7 @@ class DeleteCommandTest {
         assertTrue(result);
         assertNull(persistentData.getLink("discord"));
         assertEquals(1, storage.getSaveCount());
+        assertTrue(commandSender.getMessages().get(0).endsWith("Link deleted."));
     }
 
     @Test

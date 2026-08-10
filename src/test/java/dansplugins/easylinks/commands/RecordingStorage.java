@@ -7,7 +7,6 @@ import dansplugins.easylinks.services.Storage;
  */
 class RecordingStorage implements Storage {
     private int saveCount = 0;
-    private int loadCount = 0;
 
     @Override
     public void save() {
@@ -16,14 +15,10 @@ class RecordingStorage implements Storage {
 
     @Override
     public void load() {
-        loadCount++;
+        throw new UnsupportedOperationException("Commands are not expected to load from storage.");
     }
 
     int getSaveCount() {
         return saveCount;
-    }
-
-    int getLoadCount() {
-        return loadCount;
     }
 }

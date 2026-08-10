@@ -31,6 +31,7 @@ class CreateCommandTest {
         assertTrue(result);
         assertNotNull(persistentData.getLink("discord"));
         assertEquals(1, storage.getSaveCount());
+        assertTrue(commandSender.getMessages().get(0).endsWith("Link created."));
     }
 
     @Test
@@ -41,5 +42,6 @@ class CreateCommandTest {
         assertFalse(result);
         assertEquals(0, persistentData.getLinks().size());
         assertEquals(0, storage.getSaveCount());
+        assertTrue(commandSender.getMessages().get(0).endsWith("Usage: /el create \"label\" \"link\""));
     }
 }
