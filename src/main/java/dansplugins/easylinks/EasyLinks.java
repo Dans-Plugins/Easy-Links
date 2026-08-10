@@ -41,6 +41,15 @@ public class EasyLinks extends PonderBukkitPlugin {
     }
 
     /**
+     * This runs when the server stops. Link data is written back to storage so that links created
+     * or deleted during the session, along with their use counts, survive the restart.
+     */
+    @Override
+    public void onDisable() {
+        storageService.save();
+    }
+
+    /**
      * This method handles commands sent to the minecraft server and interprets them if the label matches one of the core commands.
      * @param sender The sender of the command.
      * @param cmd The command that was sent. This is unused.
@@ -114,8 +123,8 @@ public class EasyLinks extends PonderBukkitPlugin {
      */
     private void initializeCommandService() {
         ArrayList<AbstractPluginCommand> commands = new ArrayList<>(Arrays.asList(
-                new HelpCommand(), new CreateCommand(persistentData),
-                new DeleteCommand(persistentData), new ViewCommand(persistentData),
+                new HelpCommand(), new CreateCommand(persistentData, storageService),
+                new DeleteCommand(persistentData, storageService), new ViewCommand(persistentData),
                 new ListCommand(persistentData), new StatsCommand(persistentData)
         ));
         getPonder().getCommandService().initialize(commands, "That command wasn't found.");

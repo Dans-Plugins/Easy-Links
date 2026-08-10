@@ -10,6 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 - A `Dev Release` workflow, which republishes a rolling `dev` prerelease of `main` on every non-documentation push. This is what Dan's Plugin Manager's experimental channel installs from: `/dpm get easylinks --experimental` reads `releases/tags/dev`, so without it there is nothing for that command to download. The prerelease is unreleased, unreviewed code and is marked as such.
 
+### Fixed
+
+- Links are now actually persisted. `/el create` and `/el delete` write `links.json` immediately, and a shutdown save records the per-link use counts behind `/el stats`. Previously nothing ever called the save routine, so every link and every use count created during a session was discarded on restart.
+- The quoting required by `/el create`, `/el delete` and `/el view` is now documented. `COMMANDS.md` and `USER_GUIDE.md` showed unquoted examples such as `/el view discord`, which the argument parser rejects.
+
 ## [0.4.0-SNAPSHOT-8-8-2026] – 2026-08-08
 
 ### Changed
