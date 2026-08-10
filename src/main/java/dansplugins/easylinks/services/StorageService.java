@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * @author Daniel McCoy Stephenson
  */
-public class StorageService {
+public class StorageService implements Storage {
     private final EasyLinks easyLinks;
     private final PersistentData persistentData;
 
@@ -24,10 +24,12 @@ public class StorageService {
         jsonWriterReader.initialize(FILE_PATH);
     }
 
+    @Override
     public void save() {
         saveLinks();
     }
 
+    @Override
     public void load() {
         loadLinks();
     }

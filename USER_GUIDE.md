@@ -12,9 +12,13 @@ Easy Links is a Spigot plugin that lets server administrators save named URLs so
 
 ## Getting Started
 
-1. As an operator, create a link: `/el create discord https://discord.gg/xXtuAQ2`
-2. Players can view it: `/el view discord`
+1. As an operator, create a link: `/el create "discord" "https://discord.gg/xXtuAQ2"`
+2. Players can view it: `/el view "discord"`
 3. List all links: `/el list`
+
+Link names and URLs must be wrapped in double quotes. Without them the command is rejected with its usage message.
+
+Links are written to `plugins/EasyLinks/links.json` as soon as they are created or deleted, and use counts are written when the server shuts down, so both survive a restart.
 
 ## Permissions
 

@@ -1,6 +1,7 @@
 package dansplugins.easylinks.commands;
 
 import dansplugins.easylinks.data.PersistentData;
+import dansplugins.easylinks.services.Storage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -15,10 +16,12 @@ import java.util.Arrays;
  */
 public class DeleteCommand extends AbstractPluginCommand {
     private final PersistentData persistentData;
+    private final Storage storage;
 
-    public DeleteCommand(PersistentData persistentData) {
+    public DeleteCommand(PersistentData persistentData, Storage storage) {
         super(new ArrayList<>(Arrays.asList("delete")), new ArrayList<>(Arrays.asList("el.delete")));
         this.persistentData = persistentData;
+        this.storage = storage;
     }
 
     @Override
@@ -40,6 +43,7 @@ public class DeleteCommand extends AbstractPluginCommand {
         boolean success = persistentData.removeLink(label);
 
         if (success) {
+            storage.save();
             commandSender.sendMessage(ChatColor.GREEN + "Link deleted.");
             return true;
         }

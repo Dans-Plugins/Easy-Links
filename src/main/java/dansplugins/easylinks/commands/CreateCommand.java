@@ -2,6 +2,7 @@ package dansplugins.easylinks.commands;
 
 import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
+import dansplugins.easylinks.services.Storage;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -16,10 +17,12 @@ import java.util.Arrays;
  */
 public class CreateCommand extends AbstractPluginCommand {
     private final PersistentData persistentData;
+    private final Storage storage;
 
-    public CreateCommand(PersistentData persistentData) {
+    public CreateCommand(PersistentData persistentData, Storage storage) {
         super(new ArrayList<>(Arrays.asList("create")), new ArrayList<>(Arrays.asList("el.create")));
         this.persistentData = persistentData;
+        this.storage = storage;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class CreateCommand extends AbstractPluginCommand {
         String link = doubleQuoteArgs.get(1);
         Link newLink = new Link(label, link);
         persistentData.addLink(newLink);
+        storage.save();
         commandSender.sendMessage(ChatColor.GREEN + "Link created.");
         return true;
     }
