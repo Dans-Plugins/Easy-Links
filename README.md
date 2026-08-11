@@ -1,9 +1,9 @@
 # Easy Links
 
 ## Description
-Easy Links is a Spigot plugin that lets server administrators save named URLs so that players can look them up in-game with a short command, instead of having long links pasted into chat. Every lookup is counted, and `/el stats` reports how many links exist, how often they have been viewed in total, and which one is the most popular.
+Easy Links is a Spigot plugin that lets server administrators save named URLs so that players can look them up in-game with a short command, instead of having long links pasted into chat. Every successful lookup is counted, and `/el stats` reports how many links exist, how often they have been viewed in total, and which one is the most popular.
 
-Links are stored in `plugins/EasyLinks/links.json`, so they survive a restart.
+Links are stored in `plugins/EasyLinks/links.json`. They are written there as soon as they are created or deleted, and their use counts are written when the server shuts down, so both survive a restart.
 
 ## Installation
 1) Download the latest `EasyLinks-<version>.jar` from the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
