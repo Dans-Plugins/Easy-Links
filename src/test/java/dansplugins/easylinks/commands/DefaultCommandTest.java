@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DefaultCommandTest {
@@ -34,9 +35,9 @@ class DefaultCommandTest {
         defaultCommand.execute(commandSender.asCommandSender());
 
         for (String message : commandSender.getMessages()) {
-            assertTrue(!message.contains("dmccoystephenson/Easy-Links"),
+            assertFalse(message.contains("dmccoystephenson/Easy-Links"),
                     "The banner still advertises the pre-transfer repository owner: " + message);
-            assertTrue(!message.contains("/wiki"),
+            assertFalse(message.contains("/wiki"),
                     "The banner still advertises a wiki, and no wiki has been created: " + message);
         }
     }
