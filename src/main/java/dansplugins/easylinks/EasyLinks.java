@@ -60,7 +60,7 @@ public class EasyLinks extends PonderBukkitPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
-            DefaultCommand defaultCommand = new DefaultCommand(this);
+            DefaultCommand defaultCommand = new DefaultCommand(getVersion());
             return defaultCommand.execute(sender);
         }
 

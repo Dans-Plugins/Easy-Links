@@ -1,6 +1,5 @@
 package dansplugins.easylinks.commands;
 
-import dansplugins.easylinks.EasyLinks;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 
 import org.bukkit.ChatColor;
@@ -12,18 +11,20 @@ import java.util.Arrays;
  * @author Daniel McCoy Stephenson
  */
 public class DefaultCommand extends AbstractPluginCommand {
-    private final EasyLinks easyLinks;
+    private static final String REPOSITORY_URL = "https://github.com/Dans-Plugins/Easy-Links";
 
-    public DefaultCommand(EasyLinks easyLinks) {
+    private final String version;
+
+    public DefaultCommand(String version) {
         super(new ArrayList<>(Arrays.asList("default")), new ArrayList<>(Arrays.asList("el.default")));
-        this.easyLinks = easyLinks;
+        this.version = version;
     }
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        commandSender.sendMessage(ChatColor.AQUA + "=== Easy Links " + easyLinks.getVersion() + " ===");
+        commandSender.sendMessage(ChatColor.AQUA + "=== Easy Links " + version + " ===");
         commandSender.sendMessage(ChatColor.AQUA + "Developed by: DanTheTechMan");
-        commandSender.sendMessage(ChatColor.AQUA + "Wiki: https://github.com/dmccoystephenson/Easy-Links/wiki");
+        commandSender.sendMessage(ChatColor.AQUA + "Repository: " + REPOSITORY_URL);
         return true;
     }
 

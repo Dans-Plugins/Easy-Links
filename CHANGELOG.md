@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 
+- The banner shown by `/el` now points at `https://github.com/Dans-Plugins/Easy-Links`. It previously advertised a wiki under `dmccoystephenson/Easy-Links`, which is both the pre-transfer owner and a wiki that has never been created, so players following it reached an empty page.
 - The `Dev Release` workflow now retries publishing the `dev` prerelease before giving up. The release and its tag have to be deleted and recreated for the tag to move to the new commit, and a transient API failure inside that window previously left the repository with no `dev` release at all until the workflow was re-run by hand. Each attempt now starts from a clean slate, and an exhausted retry fails loudly.
 
 ### Added
