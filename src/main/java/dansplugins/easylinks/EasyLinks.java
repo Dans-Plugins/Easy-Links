@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import preponderous.ponder.minecraft.bukkit.abs.PonderBukkitPlugin;
 import preponderous.ponder.minecraft.bukkit.services.CommandService;
+import preponderous.ponder.minecraft.bukkit.tools.PermissionChecker;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class EasyLinks extends PonderBukkitPlugin {
     private final PersistentData persistentData = new PersistentData();
     private final StorageService storageService = new StorageService(this, persistentData);
     private final ConfigService configService = new ConfigService(this);
+    private final PermissionChecker permissionChecker = new PermissionChecker();
 
     /**
      * This runs when the server starts.
@@ -61,7 +63,7 @@ public class EasyLinks extends PonderBukkitPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (args.length == 0) {
             DefaultCommand defaultCommand = new DefaultCommand(getVersion());
-            return defaultCommand.execute(sender);
+            return defaultCommand.executeIfPermitted(sender, permissionChecker);
         }
 
         return commandService.interpretAndExecuteCommand(sender, label, args);
