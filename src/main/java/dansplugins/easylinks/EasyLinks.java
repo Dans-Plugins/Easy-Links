@@ -9,7 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import preponderous.ponder.minecraft.bukkit.abs.PonderBukkitPlugin;
-import preponderous.ponder.minecraft.bukkit.services.CommandService;
 import preponderous.ponder.minecraft.bukkit.tools.PermissionChecker;
 
 import java.io.File;
@@ -22,7 +21,6 @@ import java.util.Arrays;
 public class EasyLinks extends PonderBukkitPlugin {
     private final String pluginVersion = "v" + getDescription().getVersion();
 
-    private final CommandService commandService = new CommandService(getPonder());
     private final PersistentData persistentData = new PersistentData();
     private final StorageService storageService = new StorageService(this, persistentData);
     private final ConfigService configService = new ConfigService(this);
@@ -53,6 +51,8 @@ public class EasyLinks extends PonderBukkitPlugin {
 
     /**
      * This method handles commands sent to the minecraft server and interprets them if the label matches one of the core commands.
+     * Subcommands are dispatched through the command service Ponder owns, which is the one
+     * {@link #initializeCommandService()} hands the plugin's commands to.
      * @param sender The sender of the command.
      * @param cmd The command that was sent. This is unused.
      * @param label The core command that has been invoked.
@@ -66,7 +66,7 @@ public class EasyLinks extends PonderBukkitPlugin {
             return defaultCommand.executeIfPermitted(sender, permissionChecker);
         }
 
-        return commandService.interpretAndExecuteCommand(sender, label, args);
+        return getPonder().getCommandService().interpretAndExecuteCommand(sender, label, args);
     }
 
     /**
