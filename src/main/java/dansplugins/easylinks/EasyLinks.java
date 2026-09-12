@@ -5,6 +5,7 @@ import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
 import dansplugins.easylinks.services.ConfigService;
 import dansplugins.easylinks.services.StorageService;
+import dansplugins.easylinks.trace.TraceClient;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
@@ -14,6 +15,7 @@ import preponderous.ponder.minecraft.bukkit.tools.PermissionChecker;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author Daniel McCoy Stephenson
@@ -25,6 +27,10 @@ public class EasyLinks extends PonderBukkitPlugin {
     private final StorageService storageService = new StorageService(this, persistentData);
     private final ConfigService configService = new ConfigService(this);
     private final PermissionChecker permissionChecker = new PermissionChecker();
+
+    // A no-op until the config has been read, so a command arriving before
+    // onEnable() finishes has something safe to report to.
+    private TraceClient trace = TraceClient.disabled();
 
     /**
      * This runs when the server starts.
@@ -38,6 +44,14 @@ public class EasyLinks extends PonderBukkitPlugin {
         persistentData.addLink(new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links"));
 
         storageService.load();
+
+        // usage reporting: one event now, one per command; see config.yml
+        trace = TraceClient.builder(configService.getUsageReportingEndpoint(), getName())
+                .key(configService.getUsageReportingKey())
+                .enabled(configService.isUsageReportingEnabled())
+                .logger(getLogger())
+                .build();
+        trace.report("startup", null, Collections.singletonMap("version", getDescription().getVersion()));
     }
 
     /**
@@ -46,6 +60,7 @@ public class EasyLinks extends PonderBukkitPlugin {
      */
     @Override
     public void onDisable() {
+        trace.close();
         storageService.save();
     }
 
@@ -61,6 +76,7 @@ public class EasyLinks extends PonderBukkitPlugin {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
         if (args.length == 0) {
             DefaultCommand defaultCommand = new DefaultCommand(getVersion());
             return defaultCommand.executeIfPermitted(sender, permissionChecker);
@@ -101,11 +117,17 @@ public class EasyLinks extends PonderBukkitPlugin {
     }
 
     private void initializeConfig() {
-        if (configFileExists()) {
-            performCompatibilityChecks();
-        }
-        else {
+        boolean firstRun = !configFileExists();
+
+        // Writes the bundled config.yml, comments and all, when there is none on disk. It never
+        // rewrites a file that already exists, so an installation that predates a bundled key
+        // reads it through the defaults instead; see ConfigService.
+        saveDefaultConfig();
+
+        if (firstRun) {
             configService.saveMissingConfigDefaultsIfNotPresent();
+        } else {
+            performCompatibilityChecks();
         }
     }
 

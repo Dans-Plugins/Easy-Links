@@ -16,6 +16,11 @@ import org.bukkit.configuration.file.FileConfiguration;
  * @author Daniel McCoy Stephenson
  */
 public class ConfigService {
+    private static final String USAGE_REPORTING_ENABLED_KEY = "usage-reporting.enabled";
+    private static final String USAGE_REPORTING_ENDPOINT_KEY = "usage-reporting.endpoint";
+    private static final String USAGE_REPORTING_KEY_KEY = "usage-reporting.key";
+    private static final String DEFAULT_USAGE_REPORTING_ENDPOINT = "https://trace.danielstephenson.dev";
+
     private final EasyLinks easyLinks;
 
     private boolean altered = false;
@@ -47,7 +52,7 @@ public class ConfigService {
             } else if (option.equalsIgnoreCase("A")) {
                 getConfig().set(option, Integer.parseInt(value));
                 sender.sendMessage(ChatColor.GREEN + "Integer set.");
-            } else if (option.equalsIgnoreCase("debugMode")) {
+            } else if (option.equalsIgnoreCase("debugMode") || option.equalsIgnoreCase(USAGE_REPORTING_ENABLED_KEY)) {
                 getConfig().set(option, Boolean.parseBoolean(value));
                 sender.sendMessage(ChatColor.GREEN + "Boolean set.");
             } else if (option.equalsIgnoreCase("C")) {
@@ -70,7 +75,33 @@ public class ConfigService {
     public void sendConfigList(CommandSender sender) {
         sender.sendMessage(ChatColor.AQUA + "=== Config List ===");
         sender.sendMessage(ChatColor.AQUA + "version: " + getConfig().getString("version")
-                + ", debugMode: " + getString("debugMode"));
+                + ", debugMode: " + getString("debugMode")
+                + ", usage-reporting.enabled: " + isUsageReportingEnabled());
+    }
+
+    // The one-argument getters, deliberately. saveDefaultConfig() never touches a
+    // config.yml that already exists, so a server upgraded from a version before
+    // usage reporting has no usage-reporting block on disk until the next version
+    // change rewrites the file. Bukkit registers the jar's config.yml as the
+    // defaults for that file, and the one-argument getters fall through to them --
+    // but the two-argument getters return their explicit fallback instead, which
+    // for the key would be "" and would turn reporting off on every existing
+    // installation. Verified against YamlConfiguration, not assumed; see
+    // ConfigServiceTest.
+
+    public boolean isUsageReportingEnabled() {
+        return getConfig().getBoolean(USAGE_REPORTING_ENABLED_KEY);
+    }
+
+    public String getUsageReportingEndpoint() {
+        String endpoint = getConfig().getString(USAGE_REPORTING_ENDPOINT_KEY);
+        return endpoint != null ? endpoint : DEFAULT_USAGE_REPORTING_ENDPOINT;
+    }
+
+    /** Empty when no key is configured or bundled, which the client treats as "off". */
+    public String getUsageReportingKey() {
+        String key = getConfig().getString(USAGE_REPORTING_KEY_KEY);
+        return key != null ? key : "";
     }
 
     public boolean hasBeenAltered() {
