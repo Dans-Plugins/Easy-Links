@@ -100,4 +100,40 @@ class ConfigServiceTest {
         assertEquals("http://localhost:8080", configService.getUsageReportingEndpoint());
         assertEquals("abc", configService.getUsageReportingKey());
     }
+
+    // The block-on-disk write EasyLinks.performCompatibilityChecks() triggers: isSet() must
+    // not count the defaults, or the write would never happen; copyDefaults(true) + save
+    // (saveMissingConfigDefaultsIfNotPresent) must be what puts the block into the file.
+
+    @Test
+    void anOlderConfigDoesNotCountTheDefaultsAsTheBlockBeingOnDisk() {
+        ConfigService configService = configServiceFor("version: v0.1\ndebugMode: false\n");
+
+        assertFalse(configService.isSet("usage-reporting"), "the on-enable write would never trigger");
+        assertTrue(configService.isUsageReportingEnabled(), "...while the getters still read through");
+    }
+
+    @Test
+    void aConfigThatHasTheBlockIsRecognisedAsSuch() {
+        ConfigService configService = configServiceFor("usage-reporting:\n  enabled: false\n");
+
+        assertTrue(configService.isSet("usage-reporting"));
+    }
+
+    @Test
+    void copyingTheDefaultsWritesTheBlockWithTheBundledValues() throws Exception {
+        YamlConfiguration onDisk = new YamlConfiguration();
+        onDisk.loadFromString("version: v0.1\ndebugMode: false\n");
+        onDisk.setDefaults(bundledDefaults());
+        onDisk.options().copyDefaults(true);
+
+        YamlConfiguration written = new YamlConfiguration();
+        written.loadFromString(onDisk.saveToString());
+
+        assertTrue(written.isSet("usage-reporting"));
+        assertEquals(true, written.get("usage-reporting.enabled", null));
+        assertEquals("https://trace.danielstephenson.dev", written.get("usage-reporting.endpoint", null));
+        assertEquals(BUNDLED_KEY, written.get("usage-reporting.key", null));
+        assertEquals("v0.1", written.getString("version"), "the existing keys survive the write");
+    }
 }

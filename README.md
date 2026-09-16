@@ -35,5 +35,17 @@ You can find the support discord server [here](https://discord.gg/xXtuAQ2).
 ### Experiencing a bug?
 Please open an issue [here](https://github.com/Dans-Plugins/Easy-Links/issues).
 
+## Usage reporting
+
+Usage reporting is on by default: each time the plugin is enabled, and each time one of its commands is run, it sends its name, its version and the command's name to the author's trace server at https://trace.danielstephenson.dev, so it is known which plugins are actually in use. Nothing about players, worlds, IP addresses or the server is sent, and nothing typed after a command is.
+
+To turn it off:
+
+- for this plugin: set `usage-reporting.enabled: false` in `plugins/EasyLinks/config.yml`
+- for every plugin on the server that reports to trace: set `enabled: false` in `plugins/trace/config.yml` (written on first start)
+- for the whole server process: set the environment variable `TRACE_USAGE_REPORTING=off` (or `DO_NOT_TRACK=1`)
+
+The plugin says on every start whether reporting is on. Details: https://github.com/Stephenson-Software/trace#usage-reporting
+
 ## Contributing
 - [CONTRIBUTING.md](CONTRIBUTING.md)
