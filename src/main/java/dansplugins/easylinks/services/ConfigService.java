@@ -79,14 +79,14 @@ public class ConfigService {
                 + ", usage-reporting.enabled: " + isUsageReportingEnabled());
     }
 
-    // The one-argument getters, deliberately. saveDefaultConfig() never touches a
-    // config.yml that already exists, so a server upgraded from a version before
-    // usage reporting has no usage-reporting block on disk until the next version
-    // change rewrites the file. Bukkit registers the jar's config.yml as the
-    // defaults for that file, and the one-argument getters fall through to them --
-    // but the two-argument getters return their explicit fallback instead, which
-    // for the key would be "" and would turn reporting off on every existing
-    // installation. Verified against YamlConfiguration, not assumed; see
+    // The one-argument getters, deliberately. Bukkit registers the jar's config.yml
+    // as the defaults for the file on disk, and the one-argument getters fall
+    // through to them -- but the two-argument getters return their explicit
+    // fallback instead, which for the key would be "" and would turn reporting
+    // off wherever the block is missing from disk. EasyLinks writes the block out
+    // on enable when it is missing (see performCompatibilityChecks), so this only
+    // matters for a hand-trimmed config.yml or a plugins directory that could not
+    // be written to. Verified against YamlConfiguration, not assumed; see
     // ConfigServiceTest.
 
     public boolean isUsageReportingEnabled() {
