@@ -6,7 +6,7 @@ Easy Links is a Spigot plugin that lets server administrators save named URLs so
 Links are stored in `plugins/EasyLinks/links.json`. They are written there as soon as they are created or deleted, and their use counts are written when the server shuts down, so both survive a restart.
 
 ## Installation
-1) Download the latest `EasyLinks-<version>.jar` from the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
+1) Download the latest `EasyLinks-<version>.jar` from [SpigotMC](https://www.spigotmc.org/resources/easylinks-early-access.98040/) or the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
 2) Once downloaded, place the jar in the plugins folder of your server files.
 3) Restart your server.
 
