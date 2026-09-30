@@ -46,14 +46,14 @@ public class EasyLinks extends PonderBukkitPlugin {
         storageService.load();
 
         // usage reporting: one event now, one per command; see config.yml
-        trace = TraceClient.builder(configService.getUsageReportingEndpoint(), getName())
+        trace = TraceClient.builder(configService.getUsageReportingEndpoint(), getName(), getDescription().getVersion())
                 .key(configService.getUsageReportingKey())
                 .enabled(configService.isUsageReportingEnabled())
                 .serverWideConfig(getDataFolder().getParentFile())
                 .logger(getLogger())
                 .build();
         logUsageReportingStatus();
-        trace.report("startup", null, Collections.singletonMap("version", getDescription().getVersion()));
+        trace.report("startup");
     }
 
     /** Says on every start whether usage reporting is on, and why not when it is off. */
