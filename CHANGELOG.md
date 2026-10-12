@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `/el delete` given a label that matches no saved link now replies, in red, `That link wasn't found.` — the same message `/el view` gives. It used to reply `Something went wrong.` in green, the colour of a success message.
+
 ## [0.6.1] – 2026-10-07
 
 ### Changed

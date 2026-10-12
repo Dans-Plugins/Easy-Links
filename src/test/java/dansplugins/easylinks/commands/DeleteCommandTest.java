@@ -2,6 +2,7 @@ package dansplugins.easylinks.commands;
 
 import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
+import org.bukkit.ChatColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,5 +43,13 @@ class DeleteCommandTest {
         assertFalse(result);
         assertEquals(1, persistentData.getLinks().size());
         assertEquals(0, storage.getSaveCount());
+    }
+
+    @Test
+    void execute_reportsAnUnknownLabelAsNotFound() {
+        deleteCommand.execute(commandSender.asCommandSender(), new String[]{"\"nonexistent\""});
+
+        assertEquals(1, commandSender.getMessages().size());
+        assertEquals(ChatColor.RED + "That link wasn't found.", commandSender.getMessages().get(0));
     }
 }
