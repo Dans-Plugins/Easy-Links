@@ -48,7 +48,7 @@ public class DeleteCommand extends AbstractPluginCommand {
             return true;
         }
         else {
-            commandSender.sendMessage(ChatColor.GREEN + "Something went wrong.");
+            commandSender.sendMessage(ChatColor.RED + "That link wasn't found.");
             return false;
         }
     }
