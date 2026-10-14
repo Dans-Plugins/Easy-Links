@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -51,5 +52,46 @@ class DeleteCommandTest {
 
         assertEquals(1, commandSender.getMessages().size());
         assertEquals(ChatColor.RED + "That link wasn't found.", commandSender.getMessages().get(0));
+    }
+
+    @Test
+    void execute_matchesTheLabelCaseInsensitively() {
+        boolean result = deleteCommand.execute(commandSender.asCommandSender(), new String[]{"\"DISCORD\""});
+
+        assertTrue(result);
+        assertEquals(0, persistentData.getLinks().size());
+        assertEquals(1, storage.getSaveCount());
+    }
+
+    @Test
+    void execute_leavesOtherLinksInPlace() {
+        persistentData.addLink(new Link("wiki", "https://example.com/wiki"));
+
+        deleteCommand.execute(commandSender.asCommandSender(), new String[]{"\"discord\""});
+
+        assertEquals(1, persistentData.getLinks().size());
+        assertNull(persistentData.getLink("discord"));
+        assertNotNull(persistentData.getLink("wiki"));
+    }
+
+    @Test
+    void execute_sendsUsageWhenTheLabelIsNotQuoted() {
+        boolean result = deleteCommand.execute(commandSender.asCommandSender(), new String[]{"discord"});
+
+        assertFalse(result);
+        assertNotNull(persistentData.getLink("discord"));
+        assertEquals(0, storage.getSaveCount());
+        assertTrue(commandSender.getMessages().get(0).endsWith("Usage: /el delete \"label\""));
+    }
+
+    @Test
+    void execute_sendsUsageWhenNoArgumentsAreGiven() {
+        boolean result = deleteCommand.execute(commandSender.asCommandSender());
+
+        assertFalse(result);
+        assertNotNull(persistentData.getLink("discord"));
+        assertEquals(0, storage.getSaveCount());
+        assertEquals(1, commandSender.getMessages().size());
+        assertEquals(ChatColor.RED + "Usage: /el delete \"label\"", commandSender.getMessages().get(0));
     }
 }
