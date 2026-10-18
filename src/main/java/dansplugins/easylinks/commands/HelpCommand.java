@@ -19,12 +19,12 @@ public class HelpCommand extends AbstractPluginCommand {
 
     @Override
     public boolean execute(CommandSender commandSender) {
-        commandSender.sendMessage(ChatColor.AQUA + "/el help");
-        commandSender.sendMessage(ChatColor.AQUA + "/el list");
-        commandSender.sendMessage(ChatColor.AQUA + "/el view");
-        commandSender.sendMessage(ChatColor.AQUA + "/el create");
-        commandSender.sendMessage(ChatColor.AQUA + "/el delete");
-        commandSender.sendMessage(ChatColor.AQUA + "/el stats");
+        commandSender.sendMessage(ChatColor.AQUA + "/el help - View a list of commands.");
+        commandSender.sendMessage(ChatColor.AQUA + "/el list - List all saved links.");
+        commandSender.sendMessage(ChatColor.AQUA + "/el view \"label\" - View the URL for a saved link.");
+        commandSender.sendMessage(ChatColor.AQUA + "/el create \"label\" \"link\" - Create a new link.");
+        commandSender.sendMessage(ChatColor.AQUA + "/el delete \"label\" - Delete a link.");
+        commandSender.sendMessage(ChatColor.AQUA + "/el stats - View plugin statistics.");
         return true;
     }
 

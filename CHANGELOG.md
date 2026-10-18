@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- `/el help` now shows each command's arguments and what it does, e.g. `/el view "label" - View the URL for a saved link.`; before, it listed only the bare command names, so nothing said that `view`, `create` and `delete` take double-quoted arguments.
+
 ## [0.6.3] – 2026-10-16
 
 No user-facing changes; this release only adds test coverage.
