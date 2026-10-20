@@ -53,6 +53,8 @@ Run the build with:
 
     mvn clean package
 
+The build runs the JUnit tests under `src/test/java`; run them on their own with `mvn test`.
+
 For manual testing, place the built JAR from `target/` into a local Spigot server's `plugins` folder and restart.
 
 ## Questions
