@@ -13,7 +13,7 @@ Links are stored in `plugins/EasyLinks/links.json`. They are written there as so
 This plugin is supported on the Minecraft versions listed in [`minecraft-versions.json`](minecraft-versions.json): currently **1.19.4**, **1.21.11**, **26.2** and **26.3** (Spigot and its forks). Every stable release is booted on a real server of each of these versions before it is published, and every build checks that the plugin only uses Bukkit API that exists on all of them. Other versions from 1.19.4 onwards are expected to work but are not tested. To support another version, add it to the file: both checks pick it up.
 
 ## Installation
-1) Download the latest `EasyLinks-<version>.jar` from [SpigotMC](https://www.spigotmc.org/resources/easylinks-early-access.98040/) or the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
+1) Download the latest `Easy-Links-<version>.jar` from [SpigotMC](https://www.spigotmc.org/resources/easylinks-early-access.98040/) or the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
 2) Once downloaded, place the jar in the plugins folder of your server files.
 3) Restart your server.
 
