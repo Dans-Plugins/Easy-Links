@@ -12,6 +12,6 @@ Arguments must be wrapped in double quotes. A command given unquoted arguments i
 | `/el help` | View a list of commands. | `el.help` |
 | `/el list` | List the labels of all saved links. | `el.list` |
 | `/el view "<label>"` | View the URL for a saved link. Each successful lookup adds one to the link's use count. | `el.view` |
-| `/el stats` | View plugin statistics: the number of links, their total use count and the label of the most used link (`N/A` when there are no links). | `el.stats` |
+| `/el stats` | View plugin statistics: the number of links, their total use count and the label of the most used link (`N/A` when there are no links; when several links share the highest count, any one of them may be shown). | `el.stats` |
 | `/el create "<label>" "<link>"` | Create a new link. | `el.create` |
 | `/el delete "<label>"` | Delete a link. | `el.delete` |
