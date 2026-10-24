@@ -6,7 +6,7 @@ Easy Links is a Spigot plugin that lets server administrators save named URLs so
 
 ## Installation
 
-1. Download the latest `Easy-Links-<version>.jar` from the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
+1. Download the latest `Easy-Links-<version>.jar` from [SpigotMC](https://www.spigotmc.org/resources/easylinks-early-access.98040/) or the [Releases](https://github.com/Dans-Plugins/Easy-Links/releases) page.
 2. Place the JAR in your server's `plugins/` folder.
 3. Restart the server.
 

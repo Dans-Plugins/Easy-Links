@@ -10,8 +10,8 @@ Arguments must be wrapped in double quotes. A command given unquoted arguments i
 |---------|-------------|------------|
 | `/el` | View the plugin banner (name, version, repository link). | `el.default` |
 | `/el help` | View a list of commands. | `el.help` |
-| `/el list` | List all saved links. | `el.list` |
-| `/el view "<label>"` | View the URL for a saved link. | `el.view` |
-| `/el stats` | View plugin statistics. | `el.stats` |
+| `/el list` | List the labels of all saved links. | `el.list` |
+| `/el view "<label>"` | View the URL for a saved link. Each successful lookup adds one to the link's use count. | `el.view` |
+| `/el stats` | View plugin statistics: the number of links, their total use count and the label of the most used link (`N/A` when there are no links; when several links share the highest count, any one of them may be shown). | `el.stats` |
 | `/el create "<label>" "<link>"` | Create a new link. | `el.create` |
 | `/el delete "<label>"` | Delete a link. | `el.delete` |
