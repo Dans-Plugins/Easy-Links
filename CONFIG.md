@@ -17,7 +17,9 @@ author's [trace](https://github.com/Stephenson-Software/trace-client-java) serve
 plugins are actually in use. An event carries the plugin's name, the event name (`startup` or
 `command`), the plugin version, and for a command the command name, plus a random server ID (the
 `server-id` line in `plugins/trace/config.yml`, which identifies no person, account or IP address;
-deleting the line gets a new one) — nothing about players or the world. Sending happens off the main
+deleting the line gets a new one) — nothing about players or the world. Repeats of the same event
+within 60 seconds are counted rather than sent one by one: the first goes out at once, the rest as a
+single event carrying the count, and `startup` is never held back. Sending happens off the main
 thread, never delays a tick, and is dropped silently if the
 server cannot be reached. The plugin says on every start whether reporting is on.
 
