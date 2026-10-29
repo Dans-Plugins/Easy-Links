@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - The vendored trace client is now 0.7.0, which coalesces repeated usage events: the first report of an event is sent at once, and identical reports in the next 60 seconds are counted and sent as one event carrying the count, so a command run in a loop (by a player or another plugin) can no longer flood the trace server. `startup` is never held back. What an event carries and the opt-outs are unchanged. Details: https://github.com/Stephenson-Software/trace-client-java/releases/tag/0.7.0.
+- Usage reporting now counts a `command` event only when a player runs the command; console, command-block and plugin-dispatched commands are no longer reported.
 
 ## [0.7.0] – 2026-10-28
 
