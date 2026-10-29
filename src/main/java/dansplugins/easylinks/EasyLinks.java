@@ -8,6 +8,7 @@ import dansplugins.easylinks.services.StorageService;
 import dansplugins.easylinks.trace.TraceClient;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import preponderous.ponder.minecraft.bukkit.abs.AbstractPluginCommand;
 import preponderous.ponder.minecraft.bukkit.abs.PonderBukkitPlugin;
 import preponderous.ponder.minecraft.bukkit.tools.PermissionChecker;
@@ -91,7 +92,10 @@ public class EasyLinks extends PonderBukkitPlugin {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
+        // Console, command-block and plugin-dispatched commands are not counted.
+        if (sender instanceof Player) {
+            trace.report("command", null, Collections.singletonMap("name", cmd.getName()));
+        }
         if (args.length == 0) {
             DefaultCommand defaultCommand = new DefaultCommand(getVersion());
             return defaultCommand.executeIfPermitted(sender, permissionChecker);
