@@ -46,7 +46,7 @@ public class EasyLinks extends PonderBukkitPlugin {
 
         storageService.load();
 
-        // usage reporting: one event now, one per command; see config.yml
+        // usage reporting: one event now, one per command a player runs; see config.yml
         trace = TraceClient.builder(configService.getUsageReportingEndpoint(), getName(), getDescription().getVersion())
                 .key(configService.getUsageReportingKey())
                 .enabled(configService.isUsageReportingEnabled())
