@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- The usage-reporting description in the bundled `config.yml`, the README and `CONFIG.md` now says a `command` event is sent only when a player runs a command, matching the behaviour since 0.8.0; it still said every use of a command was reported.
+
 ## [0.8.0] – 2026-10-30
 
 ### Changed
