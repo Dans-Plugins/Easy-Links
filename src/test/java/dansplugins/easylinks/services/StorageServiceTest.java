@@ -4,8 +4,13 @@ import dansplugins.easylinks.data.PersistentData;
 import dansplugins.easylinks.objects.Link;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +30,18 @@ class StorageServiceTest {
     Path directory;
 
     private final List<String> debugMessages = new ArrayList<>();
+    private final List<String> warnings = new ArrayList<>();
 
     private StorageService storageServiceFor(PersistentData persistentData) {
-        return new StorageService(persistentData, directory.toString() + File.separator, debugMessages::add);
+        return new StorageService(persistentData, directory.toString() + File.separator, debugMessages::add, warnings::add);
+    }
+
+    private void writeLinksJson(String content) throws IOException {
+        Files.write(directory.resolve("links.json"), content.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private String readLinksJson() throws IOException {
+        return new String(Files.readAllBytes(directory.resolve("links.json")), StandardCharsets.UTF_8);
     }
 
     @Test
@@ -114,5 +128,75 @@ class StorageServiceTest {
         assertEquals(2, debugMessages.size());
         assertEquals("Saved 2 link(s) to storage.", debugMessages.get(0));
         assertEquals("Loaded 2 link(s) from storage.", debugMessages.get(1));
+        assertTrue(warnings.isEmpty());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "[{\"label\":\"\\\"discord\\\"\",\"url\":\"\\\"https://discord.gg/example\\\"\",\"uses\":\"3\"},{\"label\":", // cut off part-way
+            "[{\"label\":\"\\\"discord\\\"\",\"url\":\"\\\"https://discord.gg/example\\\"\",\"uses\":\"3\",}]", // stray comma
+            "", // no content at all
+            "null",
+            "{\"label\":\"\\\"discord\\\"\"}", // not a list
+            "[{\"label\":\"\\\"discord\\\"\",\"url\":\"\\\"https://discord.gg/example\\\"\"}]", // no uses
+            "[{\"label\":\"\\\"discord\\\"\",\"url\":\"\\\"https://discord.gg/example\\\"\",\"uses\":\"many\"}]", // uses not a number
+            "[{\"url\":\"\\\"https://discord.gg/example\\\"\",\"uses\":\"3\"}]", // no label
+            "[{\"label\":\"\\\"discord\\\"\",\"uses\":\"3\"}]" // no URL
+    })
+    void save_afterAFailedLoad_leavesTheUnreadableFileAsItWas(String unreadable) throws IOException {
+        writeLinksJson(unreadable);
+        PersistentData persistentData = new PersistentData();
+        StorageService storageService = storageServiceFor(persistentData);
+
+        storageService.load();
+        persistentData.addLink(new Link("created afterwards", "https://example.com"));
+        storageService.save();
+
+        assertEquals(unreadable, readLinksJson());
+    }
+
+    @Test
+    void load_ofAnUnreadableFile_warnsAndLeavesNoLinks() throws IOException {
+        writeLinksJson("[{\"label\":");
+        PersistentData persistentData = new PersistentData();
+        persistentData.addLink(new Link("Easy Links", "https://github.com/dmccoystephenson/Easy-Links"));
+
+        storageServiceFor(persistentData).load();
+
+        assertTrue(persistentData.getLinks().isEmpty());
+        assertEquals(1, warnings.size());
+        assertTrue(warnings.get(0).contains("Could not read"));
+        assertTrue(debugMessages.isEmpty());
+    }
+
+    @Test
+    void save_afterAFailedLoad_warnsThatNothingWasSaved() throws IOException {
+        writeLinksJson("[{\"label\":");
+        StorageService storageService = storageServiceFor(new PersistentData());
+        storageService.load();
+        warnings.clear();
+
+        storageService.save();
+
+        assertEquals(1, warnings.size());
+        assertTrue(warnings.get(0).startsWith("links.json was not saved"));
+        assertTrue(debugMessages.isEmpty());
+    }
+
+    @Test
+    void save_afterTheFileIsRepairedAndLoaded_writesAgain() throws IOException {
+        writeLinksJson("[{\"label\":");
+        PersistentData persistentData = new PersistentData();
+        StorageService storageService = storageServiceFor(persistentData);
+        storageService.load();
+
+        writeLinksJson("[]");
+        storageService.load();
+        persistentData.addLink(new Link("discord", "https://discord.gg/example"));
+        storageService.save();
+
+        PersistentData reloaded = new PersistentData();
+        storageServiceFor(reloaded).load();
+        assertNotNull(reloaded.getLink("discord"));
     }
 }
