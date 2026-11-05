@@ -20,6 +20,8 @@ Link names and URLs must be wrapped in double quotes. Without them the command i
 
 Links are written to `plugins/EasyLinks/links.json` as soon as they are created or deleted, and use counts are written when the server shuts down, so both survive a restart.
 
+If `links.json` cannot be read, for example after a hand edit leaves a typo in it, the plugin logs a warning, starts with no links and leaves the file as it is. While that lasts, nothing is written to the file, so links created or deleted and use counts are not kept. Repair or remove the file and restart the server to get back to normal.
+
 ## Permissions
 
 | Permission | Default | Description |
