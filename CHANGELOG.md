@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.9.0] – 2026-11-06
+
 ### Fixed
 
 - A `links.json` that cannot be read is no longer overwritten. Before, a typo or a cut-off file stopped the plugin from enabling properly, and the next save, at the latest when the server shut down, replaced the file with an empty list, so every saved link was lost. The plugin now logs a warning, finishes enabling with no links and leaves the file untouched until it has been repaired or removed and the server restarted; changes made in the meantime are not kept. An entry with no label or URL now counts as unreadable too, rather than being loaded as a link that broke `/el view` and `/el delete`.
