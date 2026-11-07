@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `/el create` and `/el delete` no longer report plain success while `links.json` cannot be read. The change still applies until the next restart, but the reply now says in red that it was not saved, where before only the server console showed it.
+
 ## [0.9.0] – 2026-11-06
 
 ### Fixed

@@ -176,11 +176,17 @@ class StorageServiceTest {
         storageService.load();
         warnings.clear();
 
-        storageService.save();
+        boolean saved = storageService.save();
 
+        assertFalse(saved);
         assertEquals(1, warnings.size());
         assertTrue(warnings.get(0).startsWith("links.json was not saved"));
         assertTrue(debugMessages.isEmpty());
+    }
+
+    @Test
+    void save_reportsAWriteThatHappened() {
+        assertTrue(storageServiceFor(new PersistentData()).save());
     }
 
     @Test

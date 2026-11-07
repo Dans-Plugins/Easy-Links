@@ -38,6 +38,19 @@ class DeleteCommandTest {
     }
 
     @Test
+    void execute_saysTheRemovalIsNotKeptWhenTheSaveIsSkipped() {
+        storage.skipSaves();
+
+        boolean result = deleteCommand.execute(commandSender.asCommandSender(), new String[]{"\"discord\""});
+
+        assertTrue(result);
+        assertNull(persistentData.getLink("discord"));
+        assertEquals(1, commandSender.getMessages().size());
+        assertEquals(ChatColor.RED + "Link deleted, but only until the next restart: links.json could not be read, so it was not saved. See the server log.",
+                commandSender.getMessages().get(0));
+    }
+
+    @Test
     void execute_doesNotSaveWhenTheLabelIsNotFound() {
         boolean result = deleteCommand.execute(commandSender.asCommandSender(), new String[]{"\"nonexistent\""});
 

@@ -44,8 +44,12 @@ public class CreateCommand extends AbstractPluginCommand {
         String link = doubleQuoteArgs.get(1);
         Link newLink = new Link(label, link);
         persistentData.addLink(newLink);
-        storage.save();
-        commandSender.sendMessage(ChatColor.GREEN + "Link created.");
+        if (storage.save()) {
+            commandSender.sendMessage(ChatColor.GREEN + "Link created.");
+        }
+        else {
+            commandSender.sendMessage(ChatColor.RED + "Link created, but only until the next restart: links.json could not be read, so it was not saved. See the server log.");
+        }
         return true;
     }
 }

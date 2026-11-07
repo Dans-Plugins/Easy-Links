@@ -8,8 +8,11 @@ package dansplugins.easylinks.services;
 public interface Storage {
     /**
      * Writes the current state of the plugin's data to disk.
+     *
+     * @return false if the write was skipped because the stored data could not be read at startup,
+     *         in which case the current state will be lost at the next restart.
      */
-    void save();
+    boolean save();
 
     /**
      * Replaces the plugin's data with the state stored on disk.
