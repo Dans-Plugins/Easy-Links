@@ -43,8 +43,12 @@ public class DeleteCommand extends AbstractPluginCommand {
         boolean success = persistentData.removeLink(label);
 
         if (success) {
-            storage.save();
-            commandSender.sendMessage(ChatColor.GREEN + "Link deleted.");
+            if (storage.save()) {
+                commandSender.sendMessage(ChatColor.GREEN + "Link deleted.");
+            }
+            else {
+                commandSender.sendMessage(ChatColor.RED + "Link deleted, but only until the next restart: links.json could not be read, so it was not saved. See the server log.");
+            }
             return true;
         }
         else {

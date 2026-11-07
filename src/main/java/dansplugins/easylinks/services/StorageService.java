@@ -45,13 +45,14 @@ public class StorageService implements Storage {
     }
 
     @Override
-    public void save() {
+    public boolean save() {
         if (linksFileUnreadable) {
             warning.accept(LINKS_FILE_NAME + " was not saved, because it could not be read at startup and saving would replace it."
                     + " Repair or remove it and restart the server. Changes made until then are not kept.");
-            return;
+            return false;
         }
         saveLinks();
+        return true;
     }
 
     @Override

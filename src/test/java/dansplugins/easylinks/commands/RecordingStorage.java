@@ -7,10 +7,12 @@ import dansplugins.easylinks.services.Storage;
  */
 class RecordingStorage implements Storage {
     private int saveCount = 0;
+    private boolean saveSucceeds = true;
 
     @Override
-    public void save() {
+    public boolean save() {
         saveCount++;
+        return saveSucceeds;
     }
 
     @Override
@@ -20,5 +22,10 @@ class RecordingStorage implements Storage {
 
     int getSaveCount() {
         return saveCount;
+    }
+
+    /** Makes every later {@link #save()} report that the write was skipped. */
+    void skipSaves() {
+        saveSucceeds = false;
     }
 }

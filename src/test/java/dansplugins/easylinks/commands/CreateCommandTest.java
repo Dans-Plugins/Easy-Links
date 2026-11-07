@@ -37,6 +37,20 @@ class CreateCommandTest {
     }
 
     @Test
+    void execute_saysTheLinkIsNotKeptWhenTheSaveIsSkipped() {
+        storage.skipSaves();
+
+        boolean result = createCommand.execute(commandSender.asCommandSender(),
+                new String[]{"\"discord\"", "\"https://discord.gg/example\""});
+
+        assertTrue(result);
+        assertNotNull(persistentData.getLink("discord"));
+        assertEquals(1, commandSender.getMessages().size());
+        assertEquals(ChatColor.RED + "Link created, but only until the next restart: links.json could not be read, so it was not saved. See the server log.",
+                commandSender.getMessages().get(0));
+    }
+
+    @Test
     void execute_doesNotSaveWhenArgumentsAreMalformed() {
         boolean result = createCommand.execute(commandSender.asCommandSender(),
                 new String[]{"discord", "https://discord.gg/example"});
