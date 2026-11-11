@@ -12,6 +12,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 /**
  * @author Daniel McCoy Stephenson
  */
@@ -21,27 +24,46 @@ public class ConfigService {
     private static final String USAGE_REPORTING_KEY_KEY = "usage-reporting.key";
     private static final String DEFAULT_USAGE_REPORTING_ENDPOINT = "https://trace.danielstephenson.dev";
 
-    private final EasyLinks easyLinks;
+    private final Supplier<FileConfiguration> config;
+    private final Supplier<String> version;
+    private final Runnable saveConfig;
+    private final Consumer<String> debug;
 
     private boolean altered = false;
 
     public ConfigService(EasyLinks easyLinks) {
-        this.easyLinks = easyLinks;
+        // Lambdas rather than method references: a bound reference dereferences the plugin here,
+        // and nothing of the plugin is touched until a method of this service is called.
+        this(() -> easyLinks.getConfig(), () -> easyLinks.getVersion(), () -> easyLinks.saveConfig(),
+                message -> easyLinks.debug(message));
+    }
+
+    /**
+     * @param config Supplies the plugin's config.yml.
+     * @param version Supplies the running plugin version, written to the {@code version} key.
+     * @param saveConfig Writes the config back to disk.
+     * @param debug Receives a debug message after a config option is set.
+     */
+    ConfigService(Supplier<FileConfiguration> config, Supplier<String> version, Runnable saveConfig, Consumer<String> debug) {
+        this.config = config;
+        this.version = version;
+        this.saveConfig = saveConfig;
+        this.debug = debug;
     }
 
     public void saveMissingConfigDefaultsIfNotPresent() {
         // set version
         if (!getConfig().isString("version")) {
-            getConfig().addDefault("version", easyLinks.getVersion());
+            getConfig().addDefault("version", version.get());
         } else {
-            getConfig().set("version", easyLinks.getVersion());
+            getConfig().set("version", version.get());
         }
 
         // save config options
         if (!isSet("debugMode")) { getConfig().set("debugMode", false); }
 
         getConfig().options().copyDefaults(true);
-        easyLinks.saveConfig();
+        saveConfig.run();
     }
 
     public void setConfigOption(String option, String value, CommandSender sender) {
@@ -64,9 +86,9 @@ public class ConfigService {
             }
 
             // save
-            easyLinks.saveConfig();
+            saveConfig.run();
             altered = true;
-            easyLinks.debug("Config option '" + option + "' set to '" + value + "'.");
+            debug.accept("Config option '" + option + "' set to '" + value + "'.");
         } else {
             sender.sendMessage(ChatColor.RED + "That config option wasn't found.");
         }
@@ -109,7 +131,7 @@ public class ConfigService {
     }
 
     public FileConfiguration getConfig() {
-        return easyLinks.getConfig();
+        return config.get();
     }
 
     public boolean isSet(String option) {

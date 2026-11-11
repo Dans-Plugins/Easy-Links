@@ -136,4 +136,63 @@ class ConfigServiceTest {
         assertEquals(BUNDLED_KEY, written.get("usage-reporting.key", null));
         assertEquals("v0.1", written.getString("version"), "the existing keys survive the write");
     }
+
+    // saveMissingConfigDefaultsIfNotPresent(), called on first run and from performCompatibilityChecks().
+
+    private static final String RUNNING_VERSION = "v9.9.9";
+
+    private int saves = 0;
+
+    /** Runs saveMissingConfigDefaultsIfNotPresent() on {@code onDisk} and returns what it would write. */
+    private YamlConfiguration saveMissingDefaultsOn(String onDisk) throws Exception {
+        YamlConfiguration config = new YamlConfiguration();
+        config.loadFromString(onDisk);
+        config.setDefaults(bundledDefaults());
+
+        new ConfigService(() -> config, () -> RUNNING_VERSION, () -> saves++, message -> { })
+                .saveMissingConfigDefaultsIfNotPresent();
+
+        YamlConfiguration written = new YamlConfiguration();
+        written.loadFromString(config.saveToString());
+        return written;
+    }
+
+    @Test
+    void saveMissingDefaults_writesDebugModeOffWhenItIsAbsent_andSavesOnce() throws Exception {
+        YamlConfiguration written = saveMissingDefaultsOn("version: v0.1\n");
+
+        assertTrue(written.isSet("debugMode"));
+        assertFalse(written.getBoolean("debugMode"));
+        assertEquals(1, saves);
+    }
+
+    @Test
+    void saveMissingDefaults_keepsDebugModeThatIsAlreadyOn() throws Exception {
+        YamlConfiguration written = saveMissingDefaultsOn("version: v0.1\ndebugMode: true\n");
+
+        assertTrue(written.getBoolean("debugMode"));
+    }
+
+    @Test
+    void saveMissingDefaults_replacesAnOlderVersionWithTheRunningOne() throws Exception {
+        YamlConfiguration written = saveMissingDefaultsOn("version: v0.1\ndebugMode: false\n");
+
+        assertEquals(RUNNING_VERSION, written.getString("version"));
+    }
+
+    @Test
+    void saveMissingDefaults_writesTheRunningVersionIntoAConfigWithoutOne() throws Exception {
+        YamlConfiguration written = saveMissingDefaultsOn("");
+
+        assertEquals(RUNNING_VERSION, written.getString("version"));
+    }
+
+    @Test
+    void saveMissingDefaults_putsTheBundledUsageReportingBlockOnDisk() throws Exception {
+        YamlConfiguration written = saveMissingDefaultsOn("version: v0.1\ndebugMode: false\n");
+
+        assertTrue(written.isSet("usage-reporting"));
+        assertEquals(true, written.get("usage-reporting.enabled", null));
+        assertEquals(BUNDLED_KEY, written.get("usage-reporting.key", null));
+    }
 }
