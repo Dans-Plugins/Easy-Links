@@ -1,18 +1,8 @@
 package dansplugins.easylinks.services;
 
-/*
-    To add a new config option, the following methods must be altered:
-    - saveMissingConfigDefaultsIfNotPresent
-    - setConfigOption()
-    - sendConfigList()
- */
-
 import dansplugins.easylinks.EasyLinks;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -27,28 +17,22 @@ public class ConfigService {
     private final Supplier<FileConfiguration> config;
     private final Supplier<String> version;
     private final Runnable saveConfig;
-    private final Consumer<String> debug;
-
-    private boolean altered = false;
 
     public ConfigService(EasyLinks easyLinks) {
         // Lambdas rather than method references: a bound reference dereferences the plugin here,
         // and nothing of the plugin is touched until a method of this service is called.
-        this(() -> easyLinks.getConfig(), () -> easyLinks.getVersion(), () -> easyLinks.saveConfig(),
-                message -> easyLinks.debug(message));
+        this(() -> easyLinks.getConfig(), () -> easyLinks.getVersion(), () -> easyLinks.saveConfig());
     }
 
     /**
      * @param config Supplies the plugin's config.yml.
      * @param version Supplies the running plugin version, written to the {@code version} key.
      * @param saveConfig Writes the config back to disk.
-     * @param debug Receives a debug message after a config option is set.
      */
-    ConfigService(Supplier<FileConfiguration> config, Supplier<String> version, Runnable saveConfig, Consumer<String> debug) {
+    ConfigService(Supplier<FileConfiguration> config, Supplier<String> version, Runnable saveConfig) {
         this.config = config;
         this.version = version;
         this.saveConfig = saveConfig;
-        this.debug = debug;
     }
 
     public void saveMissingConfigDefaultsIfNotPresent() {
@@ -64,41 +48,6 @@ public class ConfigService {
 
         getConfig().options().copyDefaults(true);
         saveConfig.run();
-    }
-
-    public void setConfigOption(String option, String value, CommandSender sender) {
-        if (getConfig().isSet(option)) {
-            if (option.equalsIgnoreCase("version")) {
-                sender.sendMessage(ChatColor.RED + "Cannot set version.");
-                return;
-            } else if (option.equalsIgnoreCase("A")) {
-                getConfig().set(option, Integer.parseInt(value));
-                sender.sendMessage(ChatColor.GREEN + "Integer set.");
-            } else if (option.equalsIgnoreCase("debugMode") || option.equalsIgnoreCase(USAGE_REPORTING_ENABLED_KEY)) {
-                getConfig().set(option, Boolean.parseBoolean(value));
-                sender.sendMessage(ChatColor.GREEN + "Boolean set.");
-            } else if (option.equalsIgnoreCase("C")) {
-                getConfig().set(option, Double.parseDouble(value));
-                sender.sendMessage(ChatColor.GREEN + "Double set.");
-            } else {
-                getConfig().set(option, value);
-                sender.sendMessage(ChatColor.GREEN + "String set.");
-            }
-
-            // save
-            saveConfig.run();
-            altered = true;
-            debug.accept("Config option '" + option + "' set to '" + value + "'.");
-        } else {
-            sender.sendMessage(ChatColor.RED + "That config option wasn't found.");
-        }
-    }
-
-    public void sendConfigList(CommandSender sender) {
-        sender.sendMessage(ChatColor.AQUA + "=== Config List ===");
-        sender.sendMessage(ChatColor.AQUA + "version: " + getConfig().getString("version")
-                + ", debugMode: " + getString("debugMode")
-                + ", usage-reporting.enabled: " + isUsageReportingEnabled());
     }
 
     // The one-argument getters, deliberately. Bukkit registers the jar's config.yml
@@ -124,10 +73,6 @@ public class ConfigService {
     public String getUsageReportingKey() {
         String key = getConfig().getString(USAGE_REPORTING_KEY_KEY);
         return key != null ? key : "";
-    }
-
-    public boolean hasBeenAltered() {
-        return altered;
     }
 
     public FileConfiguration getConfig() {

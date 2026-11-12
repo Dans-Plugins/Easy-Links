@@ -149,7 +149,7 @@ class ConfigServiceTest {
         config.loadFromString(onDisk);
         config.setDefaults(bundledDefaults());
 
-        new ConfigService(() -> config, () -> RUNNING_VERSION, () -> saves++, message -> { })
+        new ConfigService(() -> config, () -> RUNNING_VERSION, () -> saves++)
                 .saveMissingConfigDefaultsIfNotPresent();
 
         YamlConfiguration written = new YamlConfiguration();
