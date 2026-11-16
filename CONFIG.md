@@ -4,7 +4,7 @@ A `config.yml` is generated in `plugins/EasyLinks/` on first run.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `version` | String | *(plugin version)* | Plugin version. Do not edit manually. |
+| `version` | String | *(plugin version prefixed with `v`, e.g. `v0.10.1`)* | The plugin version that last wrote this file. The plugin sets it to the running version on any start where it differs, so do not edit it manually. |
 | `debugMode` | Boolean | `false` | When `true`, logs a `[Debug]` line to the console each time links are saved to or loaded from `links.json`, giving the number of links. |
 | `usage-reporting.enabled` | Boolean | `true` | Whether the plugin reports usage events (see below). Set to `false` to turn it off. |
 | `usage-reporting.endpoint` | String | `https://trace.danielstephenson.dev` | The trace server events are sent to. |
