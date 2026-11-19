@@ -1,8 +1,10 @@
 package dansplugins.easylinks.services;
 
 import dansplugins.easylinks.EasyLinks;
+import dansplugins.easylinks.trace.UsageReportingSetting;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 /**
@@ -17,22 +19,31 @@ public class ConfigService {
     private final Supplier<FileConfiguration> config;
     private final Supplier<String> version;
     private final Runnable saveConfig;
+    private final Supplier<File> configFile;
 
     public ConfigService(EasyLinks easyLinks) {
         // Lambdas rather than method references: a bound reference dereferences the plugin here,
         // and nothing of the plugin is touched until a method of this service is called.
-        this(() -> easyLinks.getConfig(), () -> easyLinks.getVersion(), () -> easyLinks.saveConfig());
+        this(() -> easyLinks.getConfig(), () -> easyLinks.getVersion(), () -> easyLinks.saveConfig(),
+                () -> new File(easyLinks.getDataFolder(), "config.yml"));
+    }
+
+    ConfigService(Supplier<FileConfiguration> config, Supplier<String> version, Runnable saveConfig) {
+        this(config, version, saveConfig, () -> null);
     }
 
     /**
      * @param config Supplies the plugin's config.yml.
      * @param version Supplies the running plugin version, written to the {@code version} key.
      * @param saveConfig Writes the config back to disk.
+     * @param configFile Supplies config.yml on disk, whose opt-out wins over the loaded config.
      */
-    ConfigService(Supplier<FileConfiguration> config, Supplier<String> version, Runnable saveConfig) {
+    ConfigService(Supplier<FileConfiguration> config, Supplier<String> version, Runnable saveConfig,
+                  Supplier<File> configFile) {
         this.config = config;
         this.version = version;
         this.saveConfig = saveConfig;
+        this.configFile = configFile;
     }
 
     public void saveMissingConfigDefaultsIfNotPresent() {
@@ -60,8 +71,18 @@ public class ConfigService {
     // be written to. Verified against YamlConfiguration, not assumed; see
     // ConfigServiceTest.
 
+    /**
+     * Fails closed: only true, on or yes turns reporting on, so a quoted "false" or a typo
+     * turns it off (getBoolean() would return the bundled true for them), and an opt-out in
+     * config.yml on disk wins over the copy loaded at startup.
+     */
     public boolean isUsageReportingEnabled() {
-        return getConfig().getBoolean(USAGE_REPORTING_ENABLED_KEY);
+        return UsageReportingSetting.isEnabled(getConfig(), getConfigFile());
+    }
+
+    /** The plugin's config.yml, which may not exist yet. */
+    public File getConfigFile() {
+        return configFile.get();
     }
 
     public String getUsageReportingEndpoint() {

@@ -3,10 +3,13 @@ package dansplugins.easylinks.services;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -36,6 +39,11 @@ class ConfigServiceTest {
             @Override
             public FileConfiguration getConfig() {
                 return config;
+            }
+
+            @Override
+            public File getConfigFile() {
+                return null;
             }
         };
     }
@@ -83,6 +91,11 @@ class ConfigServiceTest {
             @Override
             public FileConfiguration getConfig() {
                 return config;
+            }
+
+            @Override
+            public File getConfigFile() {
+                return null;
             }
         };
 
@@ -194,5 +207,47 @@ class ConfigServiceTest {
         assertTrue(written.isSet("usage-reporting"));
         assertEquals(true, written.get("usage-reporting.enabled", null));
         assertEquals(BUNDLED_KEY, written.get("usage-reporting.key", null));
+    }
+
+    // The switch fails closed, and an opt-out on disk wins over the loaded config.
+
+    @TempDir
+    File dataFolder;
+
+    /** A service whose loaded config is {@code loaded} and whose config.yml on disk holds {@code onDisk}. */
+    private ConfigService configServiceWithFileOnDisk(String loaded, String onDisk) throws Exception {
+        YamlConfiguration config = new YamlConfiguration();
+        config.loadFromString(loaded);
+        config.setDefaults(bundledDefaults());
+        File file = new File(dataFolder, "config.yml");
+        Files.write(file.toPath(), onDisk.getBytes(StandardCharsets.UTF_8));
+        return new ConfigService(() -> config, () -> RUNNING_VERSION, () -> saves++, () -> file);
+    }
+
+    @Test
+    void usageReporting_aQuotedFalseTurnsReportingOff() throws Exception {
+        String quoted = "usage-reporting:\n  enabled: \"false\"\n";
+        ConfigService configService = configServiceWithFileOnDisk(quoted, quoted);
+        // getBoolean() returns the bundled default, true, for the string "false".
+        assertTrue(configService.getConfig().getBoolean("usage-reporting.enabled"));
+
+        assertFalse(configService.isUsageReportingEnabled());
+    }
+
+    @Test
+    void usageReporting_anOptOutMadeOnDiskAfterLoadingWins() throws Exception {
+        ConfigService configService = configServiceWithFileOnDisk(
+                "usage-reporting:\n  enabled: true\n", "usage-reporting:\n  enabled: false\n");
+
+        assertFalse(configService.isUsageReportingEnabled());
+    }
+
+    @Test
+    void usageReporting_aFileBukkitCannotParseKeepsReportingOff() throws Exception {
+        // Bukkit loads such a file as empty, so the loaded config falls through to the bundled true.
+        ConfigService configService = configServiceWithFileOnDisk(
+                "", "usage-reporting:\n  enabled: false\n\tbroken: [\n");
+
+        assertFalse(configService.isUsageReportingEnabled());
     }
 }

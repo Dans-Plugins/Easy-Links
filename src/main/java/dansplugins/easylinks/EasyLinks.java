@@ -6,6 +6,7 @@ import dansplugins.easylinks.objects.Link;
 import dansplugins.easylinks.services.ConfigService;
 import dansplugins.easylinks.services.StorageService;
 import dansplugins.easylinks.trace.TraceClient;
+import dansplugins.easylinks.trace.UsageReportingSetting;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -74,6 +75,24 @@ public class EasyLinks extends PonderBukkitPlugin {
      * This runs when the server stops. Link data is written back to storage so that links created
      * or deleted during the session, along with their use counts, survive the restart.
      */
+    /**
+     * Every save of config.yml goes through here. A file Bukkit could not parse was loaded as
+     * empty, so saving would replace it with the bundled defaults, usage reporting switched on
+     * included; it is left alone instead. An opt-out written into the file by hand while the
+     * server runs is carried into the loaded copy first, so a save cannot turn reporting back on.
+     */
+    @Override
+    public void saveConfig() {
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (UsageReportingSetting.isUnparseable(configFile)) {
+            getLogger().severe("config.yml could not be read, so it was not overwritten. Fix the YAML error in it and restart; "
+                    + "until then the defaults are used, and usage reporting is off.");
+            return;
+        }
+        UsageReportingSetting.keepOptOutFromDisk(getConfig(), configFile);
+        super.saveConfig();
+    }
+
     @Override
     public void onDisable() {
         trace.close();
