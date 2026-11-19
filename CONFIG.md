@@ -6,7 +6,7 @@ A `config.yml` is generated in `plugins/EasyLinks/` on first run.
 |--------|------|---------|-------------|
 | `version` | String | *(plugin version prefixed with `v`, e.g. `v0.10.1`)* | The plugin version that last wrote this file. The plugin sets it to the running version on any start where it differs, so do not edit it manually. |
 | `debugMode` | Boolean | `false` | When `true`, logs a `[Debug]` line to the console each time links are saved to or loaded from `links.json`, giving the number of links. |
-| `usage-reporting.enabled` | Boolean | `true` | Whether the plugin reports usage events (see below). Set to `false` to turn it off. Only `true`, `on` or `yes` turns it on; any other value, including a quoted `"false"`, turns it off, and the plugin never writes the switch back on once it is off in the file. |
+| `usage-reporting.enabled` | Boolean | `true` | Whether the plugin reports usage events (see below). Set to `false` to turn it off. Only `true`, `on` or `yes` turns it on; any other value, including a quoted `"false"`, turns it off, and the plugin never writes the switch back on once it is off in the file. Other spellings of the block or the switch (`usage_reporting:`, `usageReporting:`, `enable: false`, `disabled: true`), or `usage-reporting: false`, also count as off. |
 | `usage-reporting.endpoint` | String | `https://trace.danielstephenson.dev` | The trace server events are sent to. |
 | `usage-reporting.key` | String | the plugin's key | Identifies this plugin to the trace server so reports are attributed to it. Not a secret: it ships in the default config and can only report as EasyLinks. Empty means reporting is off regardless of `enabled`. |
 
