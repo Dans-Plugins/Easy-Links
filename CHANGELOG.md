@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.10.1] – 2026-11-20
+
 ### Fixed
 
 - Usage reporting stayed on when the opt-out was written in a way the plugin did not recognise: under another spelling of the block (`usage_reporting:`, `usageReporting:`), as `usage-reporting: false`, or with another spelling of the switch (`enable: false`, `disabled: true`). When the plugin wrote `config.yml` (on a version change, for example), it also added the bundled `usage-reporting` block, `enabled: true`, next to the operator's setting. Each of these now counts as off, and every save writes `usage-reporting.enabled: false` into the real block, so the file shows that reporting is off.
